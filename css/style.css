@@ -147,8 +147,29 @@ a { color: var(--red); }
   font-size: 0.9rem;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .category-section {
   margin: 28px 0 40px;
+}
+
+/* Homepage spotlight for Prime listings */
+.category-section.spotlight {
+  background: linear-gradient(180deg, #fffaf0 0%, transparent 100%);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 20px;
 }
 .category-title {
   display: flex;

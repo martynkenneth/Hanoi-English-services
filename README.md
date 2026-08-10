@@ -24,7 +24,10 @@ Delete `sample: true` and the demo listings once you have real ones — they're 
 |---|---|
 | `free` | Normal listing in its category |
 | `featured` | ⭐ gold badge, shown at the top of its category |
-| `prime` | 👑 badge, top of its category, positioned as the top-tier paid option |
+| `prime` | 👑 badge, top of its category, **plus** a "Featured this week" spotlight at the top of the homepage |
+
+The Prime spotlight only shows when no search or category filter is active, so a
+paid placement never pushes aside what someone is actively looking for.
 
 Set `tier` on any listing to control placement — this is what you'll sell as a subscription.
 
@@ -59,6 +62,22 @@ Categories included out of the box, picked for what expats in Hanoi actually nee
 4. Save — GitHub will give you a URL like `https://<username>.github.io/Hanoi-English-services/`.
 
 That URL is what you share in the Facebook expat groups.
+
+## Before you promote it — two things to change
+
+1. **Set your real domain in the social tags.** `index.html` has `og:` meta tags
+   so the link shows a proper preview card when pasted into Facebook. They point
+   at `martynkenneth.github.io/Hanoi-English-services/` — update them if you use
+   a custom domain, then re-scrape the page with the
+   [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) so
+   Facebook drops its cached copy. The preview image lives at `img/social-card.png`.
+2. **Swap the contact email.** The "Get Listed" button currently mails a personal
+   Gmail address on a public page, which spam bots will scrape. A dedicated
+   address or a form is worth setting up before the site gets traffic.
+
+Also worth doing: point the "Facebook Group" link in the header at your actual
+group (it's a placeholder), and add an analytics snippet — you'll want traffic
+numbers to justify the price when you start selling placements.
 
 ## Marketing / growth notes
 

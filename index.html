@@ -6,6 +6,23 @@
 <title>Hanoi Expat Directory — English-Speaking Services</title>
 <meta name="description" content="Find trusted English-speaking doctors, vets, lawyers, hairdressers and more in Hanoi. A free directory for expats, by expats.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇻🇳</text></svg>">
+
+<!--
+  Social share preview (Facebook, Zalo, WhatsApp).
+  IMPORTANT: Facebook needs ABSOLUTE urls here. Replace the domain below with
+  your real one once the site is live, or the share preview will show nothing.
+  After changing it, re-scrape the page at developers.facebook.com/tools/debug/
+  so Facebook drops its cached copy.
+-->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hanoi Expat Directory">
+<meta property="og:title" content="Hanoi Expat Directory — English-Speaking Services">
+<meta property="og:description" content="Doctors, vets, lawyers, hairdressers and more — English-speaking services in Hanoi, recommended by expats.">
+<meta property="og:url" content="https://martynkenneth.github.io/Hanoi-English-services/">
+<meta property="og:image" content="https://martynkenneth.github.io/Hanoi-English-services/img/social-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,6 +33,7 @@
     <nav class="header-nav">
       <a href="#categories">Categories</a>
       <a href="#advertise">List Your Business</a>
+      <!-- TODO: point this at your actual Facebook group before launch. -->
       <a href="https://www.facebook.com/groups/" target="_blank" rel="noopener">Facebook Group</a>
     </nav>
   </div>
@@ -26,6 +44,7 @@
     <h1>English-speaking services in Hanoi,<br>all in one place.</h1>
     <p>Doctors, vets, lawyers, hairdressers and more — recommended by expats, for expats. No more guessing, no more Google Translate emergencies.</p>
     <div class="search-bar">
+      <label class="visually-hidden" for="searchInput">Search services</label>
       <input type="text" id="searchInput" placeholder="Search a service, e.g. &quot;dentist&quot; or &quot;visa&quot;...">
     </div>
   </div>
@@ -82,6 +101,11 @@
         </ul>
       </div>
     </div>
+    <!--
+      NOTE: this is your personal address and it is published on a public page,
+      so spam bots will scrape it. Consider a dedicated address such as
+      hello@<yourdomain> or a contact form before you start promoting the site.
+    -->
     <a class="cta-btn" href="mailto:martynsessford@gmail.com?subject=List%20my%20business%20-%20Hanoi%20Expat%20Directory">Get Listed →</a>
   </div>
 </section>

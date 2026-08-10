@@ -14,6 +14,27 @@
     return CATEGORIES.find((c) => c.key === key);
   }
 
+  // Business details are hand-typed into data/listings.js, so an stray "&" or
+  // "<" in a name would otherwise break the page silently.
+  function esc(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // Only allow real web links through to href. A bare "example.com" gets
+  // https:// added; anything carrying another scheme (javascript:, data:) is
+  // dropped rather than linked.
+  function safeUrl(url) {
+    const trimmed = String(url || "").trim();
+    if (!trimmed) return "";
+    if (/^https?:\/\//i.test(trimmed)) return esc(trimmed);
+    if (/^[a-z][a-z0-9+.-]*:/i.test(trimmed)) return "";
+    return esc("https://" + trimmed.replace(/^\/+/, ""));
+  }
+
   function renderCategoryChips() {
     const allChip = document.createElement("button");
     allChip.className = "chip active";
@@ -53,7 +74,7 @@
     return haystack.includes(term);
   }
 
-  function cardHtml(listing) {
+  function cardHtml(listing, showCategory) {
     const isFeatured = listing.tier === "featured" || listing.tier === "prime";
     const badge =
       listing.tier === "prime"
@@ -63,22 +84,31 @@
         : "";
     const phoneHref = (listing.phone || "").replace(/[^\d+]/g, "");
     const callBtn = listing.phone
-      ? `<a href="tel:${phoneHref}">📞 Call</a>`
+      ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>`
       : "";
-    const webBtn = listing.website
-      ? `<a class="primary" href="${listing.website}" target="_blank" rel="noopener">🌐 Website</a>`
+    const url = safeUrl(listing.website);
+    const webBtn = url
+      ? `<a class="primary" href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
       : "";
     const sampleNote = listing.sample
       ? `<div class="meta">🧪 sample listing — replace with a real business</div>`
       : "";
+    // On the spotlight row the category is useful context; inside a category
+    // section it would just repeat the heading.
+    const catMeta = categoryMeta(listing.category);
+    const catNote =
+      showCategory && catMeta
+        ? `<div class="meta">${catMeta.icon} ${esc(catMeta.label)}</div>`
+        : "";
 
     return `
       <div class="card ${isFeatured ? "featured" : ""}">
         ${badge}
-        <span class="english-level">English: ${listing.englishLevel || "Unknown"}</span>
-        <h3>${listing.name}</h3>
-        <p class="desc">${listing.description || ""}</p>
-        <div class="meta">📍 ${listing.address || "Hanoi"}</div>
+        <span class="english-level">English: ${esc(listing.englishLevel || "Unknown")}</span>
+        <h3>${esc(listing.name)}</h3>
+        <p class="desc">${esc(listing.description)}</p>
+        <div class="meta">📍 ${esc(listing.address || "Hanoi")}</div>
+        ${catNote}
         ${sampleNote}
         <div class="card-actions">${callBtn}${webBtn}</div>
       </div>
@@ -96,6 +126,20 @@
     let totalResults = 0;
     let html = "";
 
+    // Prime listings get a spotlight at the top of the homepage, across every
+    // category. Only when nothing is filtered, so it never hides real results.
+    const primes = LISTINGS.filter((l) => l.tier === "prime");
+    if (!activeCategory && !term && primes.length) {
+      html += `
+        <section class="category-section spotlight">
+          <h2 class="category-title">👑 Featured this week <span class="count">(${primes.length})</span></h2>
+          <div class="card-grid">
+            ${primes.map((l) => cardHtml(l, true)).join("")}
+          </div>
+        </section>
+      `;
+    }
+
     categoriesToShow.forEach((cat) => {
       const items = LISTINGS.filter(
         (l) => l.category === cat.key && matchesSearch(l, term)
@@ -106,9 +150,9 @@
 
       html += `
         <section class="category-section">
-          <h2 class="category-title">${cat.icon} ${cat.label} <span class="count">(${items.length})</span></h2>
+          <h2 class="category-title">${cat.icon} ${esc(cat.label)} <span class="count">(${items.length})</span></h2>
           <div class="card-grid">
-            ${items.map(cardHtml).join("")}
+            ${items.map((l) => cardHtml(l, false)).join("")}
           </div>
         </section>
       `;
