@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hanoi Expat Directory — English-Speaking Services</title>
 <meta name="description" content="Find trusted English-speaking doctors, vets, lawyers, hairdressers and more in Hanoi. A free directory for expats, by expats.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇻🇳</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 30 20%22><rect width=%2230%22 height=%2220%22 fill=%22%23da251d%22/><polygon fill=%22%23ffff00%22 points=%2215,4 16.57,8.84 21.66,8.84 17.54,11.83 19.11,16.66 15,13.67 10.89,16.66 12.46,11.83 8.34,8.84 13.43,8.84%22/></svg>">
 
 <!--
   Social share preview (Facebook, Zalo, WhatsApp).
@@ -56,7 +56,17 @@ AND THIS LINE -->
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a href="#top" class="logo">🇻🇳 Hanoi <span>Expat Directory</span></a>
+    <!--
+      Drawn as an SVG rather than the 🇻🇳 emoji: Windows ships no flag glyphs,
+      so the emoji fell back to the bare letters "VN" in the logo.
+    -->
+    <a href="#top" class="logo">
+      <svg class="logo-flag" viewBox="0 0 30 20" role="img" aria-label="Vietnam">
+        <rect width="30" height="20" fill="#da251d"/>
+        <polygon fill="#ffff00" points="15,4 16.57,8.84 21.66,8.84 17.54,11.83 19.11,16.66 15,13.67 10.89,16.66 12.46,11.83 8.34,8.84 13.43,8.84"/>
+      </svg>
+      Hanoi <span>Expat Directory</span>
+    </a>
     <nav class="header-nav">
       <a href="#categories">Categories</a>
       <a href="#advertise">List Your Business</a>

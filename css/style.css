@@ -51,6 +51,17 @@ a { color: var(--red); }
   font-size: 1.2rem;
   color: var(--ink);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Flag is drawn, not an emoji — see the note in index.html. */
+.logo-flag {
+  width: 27px;
+  height: 18px;
+  border-radius: 2px;
+  flex: none;
+  display: block;
 }
 .logo span { color: var(--red); }
 .header-nav a {
@@ -373,3 +384,8 @@ a { color: var(--red); }
   color: var(--ink-soft);
   margin: 18px auto 0;
 }
+
+/* The header is sticky, so jump links would land with the heading hidden
+   underneath it. Offset anchor targets by roughly the header's height. */
+section[id], nav[id] { scroll-margin-top: 76px; }
+html { scroll-behavior: smooth; }
