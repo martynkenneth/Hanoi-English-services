@@ -37,6 +37,34 @@ const CATEGORIES = [
 ];
 
 const LISTINGS = [
+  /* ------------------------------------------------------------------
+     COPY-PASTE TEMPLATE — copy everything between the two dashed lines
+     below, paste it directly under this block, then fill it in.
+     Keep every comma exactly where it is.
+
+  {
+    id: "",             // unique, lowercase, dashes not spaces: "hanoi-smile-dental"
+    name: "",           // "Hanoi Smile Dental"
+    category: "",       // must match a key from CATEGORIES above, e.g. "dentists"
+    description: "",    // one line, roughly 90 characters
+    address: "",        // "Tay Ho District, Hanoi"
+    phone: "",          // "+84 24 1234 5678"
+    website: "",        // full URL, or leave as "" if they have none
+    englishLevel: "",   // "Fluent", "Good" or "Basic"
+    tier: "free",       // "free", "featured" or "prime"
+    dateAdded: ""       // "2026-08-11"  — no comma after this last line
+  },
+
+     ------------------------------------------------------------------
+     Two rules that cover almost every mistake:
+       • Every line inside { } ends with a comma EXCEPT the last one.
+       • Every entry ends with },  except the very last entry in the file.
+     If you use an apostrophe in text, that is fine. If you need a double
+     quote, write it as \" so it does not end the string early.
+
+     Broke something? The site will tell you what and where instead of
+     going blank, and GitHub emails you within a minute of pushing.
+     ------------------------------------------------------------------ */
   {
     id: "sample-family-clinic",
     name: "Hanoi Family Medical Clinic",

@@ -7,6 +7,62 @@
   const resultsCount = document.getElementById("resultsCount");
   const clearFiltersBtn = document.getElementById("clearFilters");
 
+  // A typo in data/listings.js stops that file executing, so LISTINGS never
+  // gets defined and every listing vanishes. Say so plainly instead of
+  // leaving a blank page with no clue what went wrong.
+  if (typeof LISTINGS === "undefined" || typeof CATEGORIES === "undefined") {
+    listingsEl.innerHTML =
+      '<div class="empty-state">' +
+      "<strong>The listings file has a syntax error.</strong><br>" +
+      "Nothing is broken permanently — data/listings.js just couldn't be read, " +
+      "usually a missing comma or an unclosed quote in the entry you edited last.<br>" +
+      "Open the browser console (F12) to see the exact line." +
+      "</div>";
+    return;
+  }
+
+  // Drop entries that would render as a broken card, and say which and why in
+  // the console. One bad listing should never take the other 40 down with it.
+  const VALID_TIERS = ["free", "featured", "prime"];
+  const seenIds = new Set();
+  const rejected = [];
+
+  const CLEAN_LISTINGS = LISTINGS.filter((l, i) => {
+    const where = `entry #${i + 1} (${(l && l.name) || l?.id || "unnamed"})`;
+    if (!l || typeof l !== "object") {
+      rejected.push(`${where}: not a listing object`);
+      return false;
+    }
+    if (!l.name) {
+      rejected.push(`${where}: missing "name"`);
+      return false;
+    }
+    if (!CATEGORIES.some((c) => c.key === l.category)) {
+      rejected.push(`${where}: category "${l.category}" is not in CATEGORIES`);
+      return false;
+    }
+    if (l.id && seenIds.has(l.id)) {
+      rejected.push(`${where}: duplicate id "${l.id}"`);
+      return false;
+    }
+    if (l.id) seenIds.add(l.id);
+    if (l.tier && !VALID_TIERS.includes(l.tier)) {
+      // Not fatal — just fall back to a free listing rather than dropping it.
+      rejected.push(`${where}: unknown tier "${l.tier}", treated as "free"`);
+      l.tier = "free";
+    }
+    return true;
+  });
+
+  if (rejected.length) {
+    console.warn(
+      "[Hanoi Directory] " +
+        rejected.length +
+        " listing problem(s) found in data/listings.js:\n  - " +
+        rejected.join("\n  - ")
+    );
+  }
+
   let activeCategory = null; // null = all categories
   let searchTerm = "";
 
@@ -128,7 +184,7 @@
 
     // Prime listings get a spotlight at the top of the homepage, across every
     // category. Only when nothing is filtered, so it never hides real results.
-    const primes = LISTINGS.filter((l) => l.tier === "prime");
+    const primes = CLEAN_LISTINGS.filter((l) => l.tier === "prime");
     if (!activeCategory && !term && primes.length) {
       html += `
         <section class="category-section spotlight">
@@ -141,7 +197,7 @@
     }
 
     categoriesToShow.forEach((cat) => {
-      const items = LISTINGS.filter(
+      const items = CLEAN_LISTINGS.filter(
         (l) => l.category === cat.key && matchesSearch(l, term)
       ).sort((a, b) => (TIER_ORDER[a.tier] ?? 2) - (TIER_ORDER[b.tier] ?? 2));
 

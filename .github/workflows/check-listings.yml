@@ -1,0 +1,35 @@
+# Runs on every push that touches the listings file, so a typo made in the
+# GitHub web editor is caught within a minute. GitHub emails you when this
+# fails — the site keeps serving the previous good version in the meantime.
+name: Check listings
+
+on:
+  push:
+    paths:
+      - "data/listings.js"
+      - "js/script.js"
+      - "tools/check-listings.js"
+  pull_request:
+    paths:
+      - "data/listings.js"
+      - "js/script.js"
+      - "tools/check-listings.js"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check the site scripts parse
+        run: |
+          node --check js/script.js
+          node --check data/listings.js
+
+      - name: Check every listing is usable
+        run: node tools/check-listings.js
