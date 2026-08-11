@@ -63,24 +63,76 @@ Categories included out of the box, picked for what expats in Hanoi actually nee
 
 That URL is what you share in the Facebook expat groups.
 
-## Before you promote it — two things to change
+## Connecting the "Get Listed" form
 
-1. **Set your real domain in the social tags.** `index.html` has `og:` meta tags
-   so the link shows a proper preview card when pasted into Facebook. They point
-   at `martynkenneth.github.io/Hanoi-English-services/` — update them if you use
-   a custom domain, then re-scrape the page with the
-   [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) so
-   Facebook drops its cached copy. The preview image lives at `img/social-card.png`.
-2. **Swap the contact email.** The "Get Listed" button currently mails a personal
-   Gmail address on a public page, which spam bots will scrape. A dedicated
-   address or a form is worth setting up before the site gets traffic.
+The form on the site is plain HTML in `index.html`, so it always renders.
+Submissions POST to a Google Form. That is deliberate: the form used to be a
+Jotform embed, and `form.jotform.com` is unreachable from Vietnamese ISPs —
+the entire audience for this directory — so it appeared as a grey box.
 
-Also worth doing: point the "Facebook Group" link in the header at your actual
-group (it's a placeholder), and add an analytics snippet — you'll want traffic
-numbers to justify the price when you start selling placements.
+Everything is wired up except the Google Form itself. Do this once:
+
+1. **Create the form** at [forms.new](https://forms.new). Add one question per
+   field, in this order:
+
+   | # | Question | Type |
+   |---|---|---|
+   | 1 | Business name | Short answer |
+   | 2 | Category | Short answer |
+   | 3 | One-line description | Short answer |
+   | 4 | Address or district | Short answer |
+   | 5 | Phone or Zalo | Short answer |
+   | 6 | Email | Short answer |
+   | 7 | Website | Short answer |
+   | 8 | English level | Short answer |
+   | 9 | Listing type | Short answer |
+   | 10 | Anything else | Paragraph |
+
+   **Use Short answer even for the three that are dropdowns on the site.**
+   Google rejects a response whose multiple-choice value doesn't exactly match
+   one of its options, so renaming a single category would start silently
+   losing submissions. Our own dropdown already limits what people can pick.
+
+2. **Turn on email alerts:** Responses tab → ⋮ → "Get email notifications for
+   new responses". Without this you will not know a business applied.
+
+3. **Get the pre-filled link:** ⋮ menu → "Get pre-filled link". Type the field's
+   own name into each box — literally `business_name` in the first, `category`
+   in the second, and so on — then "Get link" → "Copy link".
+
+4. **Fill in `js/form.js`.** The copied URL contains `entry.123456=business_name`
+   pairs. Put each number against the matching name in `FIELD_IDS`, and set
+   `ACTION` to your form URL ending in `/formResponse` (not `/viewform`).
+
+Until `ACTION` is set the form still works — it falls back to opening the
+visitor's email client with every answer pre-filled. Nothing is ever lost, but
+the fallback loses people, so connect it properly.
+
+## Already set up
+
+- **Live** at `https://martynkenneth.github.io/Hanoi-English-services/` via
+  GitHub Pages from `main`. Pushing to `main` redeploys within a minute.
+- **Cloudflare Web Analytics** — no cookies, so no cookie banner needed.
+  Numbers at dash.cloudflare.com → Analytics & Logs → Web Analytics.
+- **Social share tags** point at the GitHub Pages URL. If you move to a custom
+  domain, update the `og:` tags in `index.html` and re-scrape with the
+  [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/).
+- **Listing safety net** — see "If you break the listings file" below.
+
+## If you break the listings file
+
+`data/listings.js` is hand-edited JavaScript, so a missing comma is easy. Three
+things catch it:
+
+- The page shows a plain-English error instead of going blank, and skips a
+  single bad entry rather than dropping every listing.
+- `node tools/check-listings.js` reports syntax errors, unknown categories,
+  duplicate ids and oversold paid slots.
+- GitHub runs that check on every push and emails you if it fails. The live
+  site keeps serving the last good version in the meantime.
 
 ## Marketing / growth notes
 
 - The homepage search bar and category chips are the main navigation — keep listing descriptions short (one line) so cards stay scannable on mobile, since most traffic from Facebook groups will be on phones.
-- The **"List Your Business"** section (`#advertise`) has three pricing tiers baked in (Free / Featured / Prime) with a `mailto:` CTA — update the email address in `index.html` if needed, or swap it for a form later.
+- The **"List Your Business"** section (`#advertise`) has three tiers (Free / Featured / Prime). The paid ones sell scarce position, not activity: 3 Featured and 1 Prime per category, enforced by `tools/check-listings.js` so a slot cannot be oversold by accident. Change the caps in `SLOT_LIMITS` there and in the pricing cards together.
 - Every listing you add manually can be a free listing to start — use "Featured"/"Prime" as the upsell once a business wants better placement.

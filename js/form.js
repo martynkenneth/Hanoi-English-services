@@ -1,34 +1,55 @@
 /*
   GET LISTED FORM
   ===============
-  The form itself is plain HTML in index.html, so it always renders even if
-  every third-party service in the world is unreachable. This file only
-  handles validation and sending.
+  The form itself is plain HTML in index.html, so it always renders even when
+  a third-party service is unreachable — which is why the old Jotform embed
+  had to go. This file handles validation and sending only.
+
+  Submissions POST to a Google Form. Google is reachable from Vietnamese
+  ISPs, and responses land in a Google Sheet you can sort, filter and
+  eventually use to build listings from.
 
   ---------------------------------------------------------------------------
-  SET YOUR SUBMIT ENDPOINT BELOW
+  HOW TO CONNECT IT (see README for the walkthrough)
   ---------------------------------------------------------------------------
-  Jotform was unreachable from Vietnamese ISPs, so pick a service you have
-  confirmed loads from Hanoi. Test a candidate by opening its site in your
-  browser first — if the site won't load, its form endpoint won't either.
+  1. Build a Google Form with one question per field in FIELD_IDS below,
+     in that order. Make every question "Short answer" except Anything Else,
+     which is "Paragraph".
 
-  Options, in the order worth trying:
+     Use Short answer even for the three dropdowns. Google rejects a response
+     whose multiple-choice value doesn't exactly match an option, so a single
+     renamed category would start silently losing submissions. The dropdown on
+     our own page already constrains what people can pick.
 
-    1. Google Forms  — Google is reliably reachable in Vietnam. Create a form,
-       then Send → <> embed, and read the /formResponse URL out of it. Needs
-       the entry.NNN field ids, so see USE_GOOGLE_FORM below.
-    2. Formspree     — formspree.io, free tier covers ~50 submissions/month.
-       Endpoint looks like https://formspree.io/f/xxxxxxxx
-    3. Web3Forms     — web3forms.com, free, uses an access_key field.
+  2. Click "Send" → link icon → copy the form URL, or open the form and copy
+     the address bar. Put its /formResponse form of the URL in ACTION below:
+        https://docs.google.com/forms/d/e/FORM_ID/formResponse
 
-  Until an endpoint is set, the form falls back to opening the visitor's email
-  client with everything pre-filled. That always works, but it loses people —
-  set a real endpoint as soon as you have confirmed one works.
+  3. Get the field ids: in the form editor, ⋮ menu → "Get pre-filled link",
+     type the field's own name into each box (type "business_name" into the
+     business name box, and so on), then Get link → Copy link. The copied URL
+     contains entry.123456=business_name pairs. Map each number below.
 */
 
 (function () {
   // ---- CONFIGURE ME --------------------------------------------------
-  const ENDPOINT = ""; // e.g. "https://formspree.io/f/abcdwxyz"
+  // Ends in /formResponse, not /viewform.
+  const ACTION = "";
+
+  // Our field name  ->  the Google Form's entry id, e.g. "entry.1234567890"
+  const FIELD_IDS = {
+    business_name: "",
+    category: "",
+    description: "",
+    address: "",
+    phone: "",
+    email: "",
+    website: "",
+    english_level: "",
+    listing_type: "",
+    notes: "",
+  };
+
   const FALLBACK_EMAIL = "martynsessford@gmail.com";
   // --------------------------------------------------------------------
 
@@ -41,11 +62,12 @@
   const descInput = document.getElementById("f-description");
   const descCount = document.getElementById("descCount");
 
+  const isConnected = Boolean(ACTION && FIELD_IDS.business_name);
+
   // Build the category list from the same data the directory renders, so a
   // new category never has to be added in two places.
   if (categorySelect) {
-    const placeholder = new Option("Choose…", "");
-    categorySelect.appendChild(placeholder);
+    categorySelect.appendChild(new Option("Choose…", ""));
     if (typeof CATEGORIES !== "undefined") {
       CATEGORIES.forEach((c) => {
         categorySelect.appendChild(new Option(`${c.icon} ${c.label}`, c.label));
@@ -69,12 +91,8 @@
     statusEl.className = "form-status" + (kind ? " is-" + kind : "");
   }
 
-  function firstInvalidField() {
-    return form.querySelector(":invalid:not([type='hidden'])");
-  }
-
-  // Compose a mailto: with everything the visitor typed, so a failed send
-  // never means they have to type it all again.
+  // Carry everything the visitor typed into a pre-filled email, so a failed
+  // send never means retyping the lot.
   function mailtoFallback(data) {
     const body = Object.entries(data)
       .filter(([k, v]) => v && k !== "_gotcha")
@@ -88,12 +106,11 @@
   }
 
   function showFallback(data, reason) {
+    setStatus(reason + " ", "error");
     const link = document.createElement("a");
     link.href = mailtoFallback(data);
     link.className = "form-direct";
     link.textContent = "Send it by email instead →";
-
-    setStatus(reason + " ", "error");
     statusEl.appendChild(link);
   }
 
@@ -101,26 +118,26 @@
     e.preventDefault();
 
     if (!form.checkValidity()) {
-      const bad = firstInvalidField();
+      const bad = form.querySelector(":invalid:not([type='hidden'])");
       setStatus("Please fill in the highlighted fields.", "error");
+      form.classList.add("show-errors");
       if (bad) {
         bad.focus();
         bad.scrollIntoView({ block: "center", behavior: "smooth" });
       }
-      form.classList.add("show-errors");
       return;
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
 
-    // Honeypot: silently accept and discard, so bots get no signal.
+    // Honeypot: accept and discard silently, so bots get no signal.
     if (data._gotcha) {
       setStatus("Thanks — we'll be in touch.", "ok");
       form.reset();
       return;
     }
 
-    if (!ENDPOINT) {
+    if (!isConnected) {
       showFallback(data, "The online form isn't connected yet.");
       return;
     }
@@ -128,23 +145,31 @@
     submitBtn.disabled = true;
     setStatus("Sending…", "");
 
+    // Translate our field names into Google's entry ids.
+    const payload = new URLSearchParams();
+    Object.entries(FIELD_IDS).forEach(([name, entryId]) => {
+      if (entryId && data[name]) payload.append(entryId, data[name]);
+    });
+
     try {
-      // Ten seconds, so a blocked endpoint fails fast into the fallback
-      // rather than leaving someone staring at "Sending…".
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 10000);
 
-      const res = await fetch(ENDPOINT, {
+      // Google doesn't send CORS headers on formResponse, so the reply is
+      // unreadable and we must use no-cors. That is fine for telling apart
+      // the two cases that matter: if the network is blocked the request
+      // rejects outright, and if it goes through it resolves opaque. We
+      // cannot see Google's status code, but a delivered POST is recorded.
+      await fetch(ACTION, {
         method: "POST",
-        headers: { Accept: "application/json" },
-        body: new FormData(form),
+        mode: "no-cors",
+        body: payload,
         signal: controller.signal,
       });
       clearTimeout(timeout);
 
-      if (!res.ok) throw new Error("HTTP " + res.status);
-
       form.reset();
+      form.classList.remove("show-errors");
       if (descCount) descCount.textContent = "90";
       setStatus(
         "Thanks — your listing is in. We review each one by hand and you'll hear from us within a few days.",
