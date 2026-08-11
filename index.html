@@ -136,46 +136,101 @@
 </section>
 
 <!--
-  Submission form. Lives on Jotform, so submissions land in your Jotform
-  inbox (and email you) rather than being scraped off this page.
-  Edit the questions at: https://www.jotform.com/build/262217882078060
+  This form is plain HTML served from your own site, deliberately. The
+  previous version embedded Jotform in an iframe, which was unreachable from
+  Vietnamese ISPs — the whole audience for this directory. Rendering the form
+  yourself means it always appears; only pressing Submit needs to reach the
+  outside world, and there is a fallback for when that fails too.
+
+  The submit endpoint is set in js/form.js — see the notes at the top of it.
 -->
 <section class="form-section" id="get-listed">
   <div class="wrap">
     <h2>Add your business</h2>
     <p class="form-intro">Takes about two minutes. Free listings are reviewed and published within a few days.</p>
-    <div class="form-embed">
-      <iframe
-        id="JotFormIFrame-262217882078060"
-        title="Get Listed — Hanoi Expat Directory"
-        src="https://form.jotform.com/262217882078060"
-        allow="geolocation; microphone; camera; fullscreen"
-        scrolling="no"></iframe>
-    </div>
-    <!--
-      The embed can fail for reasons outside our control — ad blockers,
-      corporate networks, or ISP interference with jotform.com. Always offer
-      a way through rather than letting a grey box be the end of the road.
-    -->
-    <p class="form-fallback">
-      Form not showing above?
-      <a class="form-direct" href="https://form.jotform.com/262217882078060" target="_blank" rel="noopener">Open it in a new tab →</a>
-    </p>
-    <p class="form-fallback">
-      Still stuck? Email <a href="mailto:martynsessford@gmail.com?subject=List%20my%20business%20-%20Hanoi%20Expat%20Directory">martynsessford@gmail.com</a>
-      or message us on Facebook and we'll add you manually.
-    </p>
+
+    <form id="listingForm" class="listing-form" novalidate>
+      <div class="field">
+        <label for="f-name">Business name <span class="req">*</span></label>
+        <input type="text" id="f-name" name="business_name" required autocomplete="organization">
+      </div>
+
+      <div class="field">
+        <label for="f-category">Category <span class="req">*</span></label>
+        <!-- Options are filled from CATEGORIES so this can never drift out of
+             sync with the categories the site actually shows. -->
+        <select id="f-category" name="category" required></select>
+      </div>
+
+      <div class="field">
+        <label for="f-description">One-line description <span class="req">*</span></label>
+        <input type="text" id="f-description" name="description" maxlength="90" required>
+        <small>Max 90 characters — this is what appears on your listing card. <span id="descCount">90</span> left.</small>
+      </div>
+
+      <div class="field">
+        <label for="f-address">Address or district <span class="req">*</span></label>
+        <input type="text" id="f-address" name="address" required>
+        <small>e.g. Tay Ho District, Hanoi. Write "Serves all of Hanoi" if you're mobile.</small>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-phone">Phone or Zalo <span class="req">*</span></label>
+          <input type="tel" id="f-phone" name="phone" required autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="f-email">Your email <span class="req">*</span></label>
+          <input type="email" id="f-email" name="email" required autocomplete="email">
+          <small>So we can reach you. Not published.</small>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-website">Website or Facebook page</label>
+        <input type="url" id="f-website" name="website" placeholder="https://">
+        <small>Optional.</small>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-english">English spoken by your staff <span class="req">*</span></label>
+          <select id="f-english" name="english_level" required>
+            <option value="">Choose…</option>
+            <option>Fluent</option>
+            <option>Good</option>
+            <option>Basic</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-tier">Listing you're interested in <span class="req">*</span></label>
+          <select id="f-tier" name="listing_type" required>
+            <option value="">Choose…</option>
+            <option>Free listing</option>
+            <option>Featured — top of my category</option>
+            <option>Prime — only business in my category</option>
+            <option>Not sure, tell me more</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-notes">Anything else we should know?</label>
+        <textarea id="f-notes" name="notes" rows="4"></textarea>
+      </div>
+
+      <!-- Spam trap: real people never fill this in, bots usually do. -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="f-website2">Leave this empty</label>
+        <input type="text" id="f-website2" name="_gotcha" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button type="submit" class="cta-btn form-submit" id="formSubmit">Submit listing →</button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
 
-<!-- Lets the form above grow/shrink to fit its content instead of scrolling inside a box. -->
-<script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
-<script>
-  window.jotformEmbedHandler(
-    "iframe[id='JotFormIFrame-262217882078060']",
-    "https://form.jotform.com/"
-  );
-</script>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -186,5 +241,7 @@
 
 <script src="data/listings.js"></script>
 <script src="js/script.js"></script>
+<!-- After listings.js: the form builds its category dropdown from CATEGORIES. -->
+<script src="js/form.js"></script>
 </body>
 </html>
