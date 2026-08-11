@@ -34,20 +34,23 @@
 (function () {
   // ---- CONFIGURE ME --------------------------------------------------
   // Ends in /formResponse, not /viewform.
-  const ACTION = "";
+  const ACTION =
+    "https://docs.google.com/forms/d/e/1FAIpQLSfCDhpZkp1le0PHZkjOpvFoANM5ZLR0HSJ7bx6-aijW8cKaTw/formResponse";
 
-  // Our field name  ->  the Google Form's entry id, e.g. "entry.1234567890"
+  // Our field name  ->  the Google Form's entry id.
+  // Taken from the form's pre-filled link. If you add or reorder questions in
+  // Google Forms, generate a fresh pre-filled link and update these.
   const FIELD_IDS = {
-    business_name: "",
-    category: "",
-    description: "",
-    address: "",
-    phone: "",
-    email: "",
-    website: "",
-    english_level: "",
-    listing_type: "",
-    notes: "",
+    business_name: "entry.1762006098",
+    category: "entry.730783359",
+    description: "entry.82509938",
+    address: "entry.1696274899",
+    phone: "entry.1799622903",
+    email: "entry.185629187",
+    website: "entry.1803095581",
+    english_level: "entry.1675126654",
+    listing_type: "entry.1388407470",
+    notes: "entry.1537706449",
   };
 
   const FALLBACK_EMAIL = "martynsessford@gmail.com";
