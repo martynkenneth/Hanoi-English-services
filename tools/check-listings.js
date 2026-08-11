@@ -87,7 +87,34 @@ LISTINGS.forEach((l, i) => {
   }
 });
 
-// --- 3. Report ---------------------------------------------------------
+// --- 3. Are the paid slots oversold? -----------------------------------
+// The pricing page promises "only 3 Featured per category" and "the only
+// Prime in your category". Selling a fourth Featured dentist silently breaks
+// that promise for the three who already paid, so make it impossible to miss.
+const SLOT_LIMITS = { featured: 3, prime: 1 };
+
+Object.entries(SLOT_LIMITS).forEach(([tier, limit]) => {
+  const byCategory = new Map();
+  LISTINGS.forEach((l) => {
+    if (l && l.tier === tier) {
+      if (!byCategory.has(l.category)) byCategory.set(l.category, []);
+      byCategory.get(l.category).push(l.name || l.id || "unnamed");
+    }
+  });
+
+  byCategory.forEach((names, category) => {
+    if (names.length > limit) {
+      problems.push(
+        `category "${category}" has ${names.length} ${tier} listings but only ${limit} ` +
+          `${limit === 1 ? "slot is" : "slots are"} sold:\n` +
+          `      ${names.join(", ")}\n` +
+          `      Either downgrade one, or change SLOT_LIMITS here and on the pricing page.`
+      );
+    }
+  });
+});
+
+// --- 4. Report ---------------------------------------------------------
 const realCount = LISTINGS.filter((l) => l && !l.sample).length;
 const sampleCount = LISTINGS.length - realCount;
 
