@@ -78,7 +78,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Family+Medical+Practice+Hanoi"
   },
   {
@@ -92,7 +91,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=H+PLUS+International+Medical+Center+Hanoi"
   },
   {
@@ -106,7 +104,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Westcoast+International+Dental+Clinic+Hanoi"
   },
   {
@@ -120,7 +117,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Australian+Dental+Clinic+Hanoi"
   },
   {
@@ -134,7 +130,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=ASVELIS+Veterinary+Clinic+Hanoi"
   },
   {
@@ -148,7 +143,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Animal+Doctors+International+Hanoi"
   },
   {
@@ -162,7 +156,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=5th+Avenue+Barbershop+Hanoi"
   },
   {
@@ -176,7 +169,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=PEWPUM+BARBERSHOP+Hanoi"
   },
   {
@@ -190,7 +182,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Serene+Spa+Hanoi+68+Ma+May"
   },
   {
@@ -204,7 +195,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Hanoi+Healing+Spa+by+MAY"
   },
   {
@@ -218,7 +208,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=ACC+Chiropractic+Clinic+Hanoi"
   },
   {
@@ -232,7 +221,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Khanh+An+Physical+Rehabilitation+Clinic+Hanoi"
   },
   {
@@ -246,7 +234,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=ASL+LAW+Hanoi"
   },
   {
@@ -260,7 +247,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=CastGlobal+Law+Vietnam+Hanoi+Branch"
   },
   {
@@ -274,7 +260,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Asian+Tigers+Group+Vietnam+Hanoi"
   },
   {
@@ -288,7 +273,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Crown+Relocations+Hanoi"
   },
   {
@@ -302,7 +286,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Property+People+Hanoi"
   },
   {
@@ -316,7 +299,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Hanoi+Housing+21+To+Ngoc+Van"
   },
   {
@@ -330,7 +312,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Vietnam-visa.com+Hanoi+TASCO+Building"
   },
   {
@@ -344,7 +325,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=VietnamVisaVOA.com+Hanoi"
   },
   {
@@ -358,7 +338,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Indochine+Insurance+Brokers+Hanoi"
   },
   {
@@ -372,7 +351,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=HSBC+Ha+Noi+Branch+29+Lieu+Giai"
   },
   {
@@ -386,7 +364,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=British+International+School+Hanoi"
   },
   {
@@ -400,7 +377,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Concordia+International+School+Hanoi"
   },
   {
@@ -414,7 +390,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=James+Hanoi+Motorbikes"
   },
   {
@@ -428,7 +403,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=RentABike+Vietnam+Hanoi"
   },
   {
@@ -442,7 +416,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Hanoi+Peak+bespoke"
   },
   {
@@ -456,7 +429,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Duc+Nhan+Tailor+Hanoi"
   },
   {
@@ -470,7 +442,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Yoga+Lab+Hanoi"
   },
   {
@@ -484,7 +455,6 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=CrossFit+Tay+Ho+Hanoi"
   },
   {
@@ -498,7 +468,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Hanoi+Laundry+Shop+42+Hang+Duong"
   },
   {
@@ -512,7 +481,6 @@ const LISTINGS = [
     englishLevel: "Good",
     tier: "free",
     dateAdded: "2026-08-13",
-    unverified: true,
     verify: "https://www.google.com/maps/search/?api=1&query=Life+Balance+Cleaning+Hanoi+88+Lang+Ha"
   }
 ];
