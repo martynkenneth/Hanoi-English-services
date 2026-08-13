@@ -146,8 +146,13 @@
     const webBtn = url
       ? `<a class="primary" href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
       : "";
+    // Two different states, deliberately worded differently: a sample is
+    // invented and must go, whereas an unverified listing is a real business
+    // whose phone and address nobody has confirmed yet.
     const sampleNote = listing.sample
       ? `<div class="meta">🧪 sample listing — replace with a real business</div>`
+      : listing.unverified
+      ? `<div class="meta">⚠️ details not confirmed yet — please check before visiting</div>`
       : "";
     // On the spotlight row the category is useful context; inside a category
     // section it would just repeat the heading.

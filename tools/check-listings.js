@@ -115,8 +115,9 @@ Object.entries(SLOT_LIMITS).forEach(([tier, limit]) => {
 });
 
 // --- 4. Report ---------------------------------------------------------
-const realCount = LISTINGS.filter((l) => l && !l.sample).length;
-const sampleCount = LISTINGS.length - realCount;
+const sampleCount = LISTINGS.filter((l) => l && l.sample).length;
+const unverifiedCount = LISTINGS.filter((l) => l && l.unverified && !l.sample).length;
+const confirmedCount = LISTINGS.length - sampleCount - unverifiedCount;
 
 if (warnings.length) {
   console.log("\n⚠ Worth a look (these do not break anything):\n");
@@ -131,6 +132,9 @@ if (problems.length) {
 }
 
 console.log(
-  `\n✓ data/listings.js is valid — ${LISTINGS.length} listings ` +
-    `(${realCount} real, ${sampleCount} sample) across ${CATEGORIES.length} categories.\n`
+  `\n✓ data/listings.js is valid — ${LISTINGS.length} listings across ` +
+    `${CATEGORIES.length} categories.\n` +
+    `  ${confirmedCount} confirmed, ${unverifiedCount} awaiting verification` +
+    (sampleCount ? `, ${sampleCount} still samples` : "") +
+    ".\n"
 );
