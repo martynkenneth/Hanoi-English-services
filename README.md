@@ -59,9 +59,11 @@ Categories included out of the box, picked for what expats in Hanoi actually nee
 1. Push this repo to GitHub (already done if you're reading this from the repo).
 2. In the repo, go to **Settings → Pages**.
 3. Under "Build and deployment", choose **Deploy from a branch**, pick this branch and `/ (root)`.
-4. Save — GitHub will give you a URL like `https://<username>.github.io/Hanoi-English-services/`.
+4. Save — GitHub serves the site, and the `CNAME` file points it at the
+   custom domain.
 
-That URL is what you share in the Facebook expat groups.
+`https://hanoiexpatdirectory.com` is what you share in the Facebook expat
+groups. The old github.io address keeps working and redirects.
 
 ## Connecting the "Get Listed" form
 
@@ -110,8 +112,10 @@ the fallback loses people, so connect it properly.
 
 ## Already set up
 
-- **Live** at `https://martynkenneth.github.io/Hanoi-English-services/` via
-  GitHub Pages from `main`. Pushing to `main` redeploys within a minute.
+- **Live** at `https://hanoiexpatdirectory.com` via GitHub Pages from `main`.
+  Pushing to `main` redeploys within a minute. The domain is set by the
+  `CNAME` file in the repo root — deleting it reverts the site to the
+  github.io address, so leave it alone.
 - **Cloudflare Web Analytics** — no cookies, so no cookie banner needed.
   Numbers at dash.cloudflare.com → Analytics & Logs → Web Analytics.
 - **Social share tags** point at the GitHub Pages URL. If you move to a custom
