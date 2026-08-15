@@ -468,3 +468,31 @@ html { scroll-behavior: smooth; }
 }
 .form-status.is-ok { color: #2a7a2a; font-weight: 600; }
 .form-status.is-error { color: var(--red); }
+
+/* Category page links — real anchors, for crawlers and for people who
+   prefer a page per service over on-page filtering. */
+.category-links {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 40px 0;
+  text-align: center;
+}
+.category-links h2 { margin: 0 0 18px; font-size: 1.2rem; }
+.cat-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.cat-links a {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.cat-links a:hover { border-color: var(--red); color: var(--red); }
