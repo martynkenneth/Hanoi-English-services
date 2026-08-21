@@ -31,6 +31,19 @@ vm.runInNewContext(
 );
 const { categories: CATEGORIES, listings: LISTINGS } = sandbox.__out__;
 
+// Guides are optional — the site builds fine before any exist.
+let GUIDES = [];
+const guidesPath = path.join(ROOT, "data", "guides.js");
+if (fs.existsSync(guidesPath)) {
+  const gs = {};
+  vm.runInNewContext(
+    fs.readFileSync(guidesPath, "utf8") + ";globalThis.__g__ = GUIDES;",
+    gs,
+    { filename: "data/guides.js" }
+  );
+  GUIDES = gs.__g__ || [];
+}
+
 /*
   A short, specific introduction per category. These are deliberately about
   what to check before you book, not padding — a page of restated listings
@@ -147,6 +160,22 @@ function otherCategoryLinks(currentKey) {
     .join("\n      ");
 }
 
+// A listing page answers "who"; the guide answers "how much" and "any good".
+// Someone who lands on one usually wants the other, and the link passes
+// authority between two pages targeting the same subject.
+function guideLinkFor(cat) {
+  const guide = GUIDES.find(
+    (g) => g.category === cat.key && (g.questions || []).some((q) => q.a && q.a.trim())
+  );
+  if (!guide) return "";
+  return `  <section class="category-section">
+    <h2 class="category-title">Questions about ${esc(cat.label.toLowerCase())} in Hanoi</h2>
+    <p class="guide-lede">${esc(guide.intro)}</p>
+    <p><a class="cta-btn" href="${SITE}/guides/${guide.slug}/">Read the guide →</a></p>
+  </section>
+`;
+}
+
 function page(cat, items) {
   const title = `English-Speaking ${cat.label} in Hanoi`;
   const desc = `${items.length} English-speaking ${cat.label.toLowerCase()} in Hanoi, with phone numbers, districts and the level of English spoken. Free directory for expats.`;
@@ -209,6 +238,7 @@ ${items.map(cardHtml).join("\n")}
     </div>
   </section>
 
+${guideLinkFor(cat)}
   <section class="category-section">
     <h2 class="category-title">Other services in Hanoi</h2>
     <nav class="cat-links">
@@ -253,6 +283,150 @@ CATEGORIES.forEach((cat) => {
   fs.writeFileSync(path.join(dir, "index.html"), page(cat, items));
   urls.push(`${SITE}/${cat.key}/`);
   written++;
+});
+
+// --- Guide (Q&A) pages --------------------------------------------------
+/*
+  Two things make these worth building rather than just more prose:
+
+  FAQPage structured data gives an assistant clean question/answer pairs it
+  can lift, instead of leaving it to infer them from paragraphs.
+
+  Every answer opens with a complete standalone sentence, because that is the
+  unit that gets quoted — in a search result, or by an AI that read the page
+  and is answering somebody who will never visit it.
+*/
+function faqJsonLd(guide, answered) {
+  return JSON.stringify(
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      name: guide.title,
+      mainEntity: answered.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+    null,
+    2
+  );
+}
+
+function guidePage(guide, answered, cat, items) {
+  const desc = guide.intro;
+  const url = `${SITE}/guides/${guide.slug}/`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(guide.title)}</title>
+<meta name="description" content="${esc(desc)}">
+<link rel="canonical" href="${url}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 30 20%22><rect width=%2230%22 height=%2220%22 fill=%22%23da251d%22/><polygon fill=%22%23ffff00%22 points=%2215,4 16.57,8.84 21.66,8.84 17.54,11.83 19.11,16.66 15,13.67 10.89,16.66 12.46,11.83 8.34,8.84 13.43,8.84%22/></svg>">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Hanoi Expat Directory">
+<meta property="og:title" content="${esc(guide.title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${SITE}/img/social-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="${SITE}/css/style.css">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "5dff00a34d7e47459a37916dae3bd27f"}'></script>
+<script type="application/ld+json">
+${faqJsonLd(guide, answered)}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="${SITE}/" class="logo">
+      <svg class="logo-flag" viewBox="0 0 30 20" role="img" aria-label="Vietnam">
+        <rect width="30" height="20" fill="#da251d"/>
+        <polygon fill="#ffff00" points="15,4 16.57,8.84 21.66,8.84 17.54,11.83 19.11,16.66 15,13.67 10.89,16.66 12.46,11.83 8.34,8.84 13.43,8.84"/>
+      </svg>
+      Hanoi <span>Expat Directory</span>
+    </a>
+    <nav class="header-nav">
+      <a href="${SITE}/">All categories</a>
+      <a href="${SITE}/#get-listed">List Your Business</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>${esc(guide.title)}</h1>
+    <p>${esc(guide.intro)}</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <article class="guide">
+${answered
+  .map(
+    (item) => `    <section class="qa">
+      <h2>${esc(item.q)}</h2>
+      <p>${esc(item.a)}</p>${
+      item.asOf ? `\n      <p class="asof">Checked ${esc(item.asOf)}.</p>` : ""
+    }
+    </section>`
+  )
+  .join("\n")}
+  </article>
+
+  <section class="category-section">
+    <h2 class="category-title">${cat.icon} ${esc(cat.label)} in Hanoi</h2>
+    <p class="guide-lede">${items.length} ${esc(cat.label.toLowerCase())} with English-speaking staff, each confirmed by phone.</p>
+    <div class="card-grid">
+${items.map(cardHtml).join("\n")}
+    </div>
+    <p class="guide-lede"><a href="${SITE}/${cat.key}/">See the full ${esc(cat.label.toLowerCase())} listing →</a></p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Made by expats living in Hanoi. Something out of date? <a href="mailto:martynsessford@gmail.com">Let us know</a>.</p>
+    <p class="fine-print">Every business listed here was confirmed by phone. Prices and details change — please check directly before booking.</p>
+  </div>
+</footer>
+
+</body>
+</html>
+`;
+}
+
+let guidesWritten = 0;
+const skippedQuestions = [];
+
+GUIDES.forEach((guide) => {
+  // An unanswered question is simply left off. Publishing the question with
+  // an empty or invented answer would be worse than not having the page.
+  const answered = (guide.questions || []).filter((x) => x.a && x.a.trim());
+  const unanswered = (guide.questions || []).filter((x) => !x.a || !x.a.trim());
+  unanswered.forEach((x) => skippedQuestions.push(`${guide.slug}: ${x.q}`));
+
+  if (answered.length === 0) return;
+
+  const cat = CATEGORIES.find((c) => c.key === guide.category);
+  if (!cat) {
+    console.error(`✗ guide "${guide.slug}" points at unknown category "${guide.category}".`);
+    process.exitCode = 1;
+    return;
+  }
+  const items = LISTINGS.filter((l) => l.category === cat.key).sort(
+    (a, b) => (TIER_ORDER[a.tier] ?? 2) - (TIER_ORDER[b.tier] ?? 2)
+  );
+
+  const dir = path.join(ROOT, "guides", guide.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), guidePage(guide, answered, cat, items));
+  urls.push(`${SITE}/guides/${guide.slug}/`);
+  guidesWritten++;
 });
 
 // Write real anchors into the homepage between the build markers. These must
@@ -307,5 +481,18 @@ Sitemap: ${SITE}/sitemap.xml
 `
 );
 
-console.log(`\n✓ Built ${written} category pages, sitemap.xml and robots.txt.`);
-console.log(`  ${urls.length} URLs total.\n`);
+console.log(`\n✓ Built ${written} category pages and ${guidesWritten} guide pages.`);
+console.log(`  sitemap.xml and robots.txt written — ${urls.length} URLs total.`);
+
+if (skippedQuestions.length) {
+  console.log(
+    `\n⚠ ${skippedQuestions.length} question(s) left off, no answer written yet:`
+  );
+  skippedQuestions.forEach((q) => console.log("    - " + q));
+  console.log(
+    "\n  These are the ones worth real research — a price you gathered yourself\n" +
+      "  is the reason anyone would cite this site. Fill them in data/guides.js.\n"
+  );
+} else {
+  console.log("");
+}

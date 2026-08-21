@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - "data/listings.js"
+      - "data/guides.js"
       - "js/script.js"
       - "index.html"
       - "tools/check-listings.js"
@@ -16,6 +17,7 @@ on:
   pull_request:
     paths:
       - "data/listings.js"
+      - "data/guides.js"
       - "js/script.js"
       - "index.html"
       - "tools/check-listings.js"
@@ -39,6 +41,7 @@ jobs:
         run: |
           node --check js/script.js
           node --check data/listings.js
+          node --check data/guides.js
           node --check tools/build.js
 
       - name: Check every listing is usable
