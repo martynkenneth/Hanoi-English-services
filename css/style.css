@@ -512,3 +512,21 @@ html { scroll-behavior: smooth; }
   margin-top: 6px;
 }
 .guide-lede { color: var(--ink-soft); font-size: 0.92rem; margin: 0 0 16px; }
+
+.guide .checked {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: #fffdf3;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 0 0 28px;
+}
+.sources {
+  border-top: 1px solid var(--border);
+  padding-top: 22px;
+  margin-top: 8px;
+}
+.sources h2 { font-size: 1rem; margin: 0 0 10px; }
+.sources ul { margin: 0 0 10px; padding-left: 18px; font-size: 0.85rem; }
+.sources li { margin-bottom: 5px; color: var(--ink-soft); }

@@ -366,7 +366,11 @@ ${faqJsonLd(guide, answered)}
 
 <main class="wrap">
   <article class="guide">
-${answered
+${
+  guide.asOf
+    ? `    <p class="checked">Prices checked ${esc(guide.asOf)}. Vietnamese đồng is the authoritative figure — dollar equivalents move with the exchange rate.</p>\n`
+    : ""
+}${answered
   .map(
     (item) => `    <section class="qa">
       <h2>${esc(item.q)}</h2>
@@ -376,7 +380,22 @@ ${answered
     </section>`
   )
   .join("\n")}
-  </article>
+${
+  (guide.sources || []).length
+    ? `    <section class="sources">
+      <h2>Where these prices come from</h2>
+      <ul>
+${guide.sources
+  .map(
+    ([name, href]) =>
+      `        <li><a href="${esc(href)}" target="_blank" rel="noopener nofollow">${esc(name)}</a></li>`
+  )
+  .join("\n")}
+      </ul>
+      <p class="asof">Prices are market benchmarks for Hanoi, not quotes from the businesses listed below. Always confirm directly before booking.</p>
+    </section>\n`
+    : ""
+}  </article>
 
   <section class="category-section">
     <h2 class="category-title">${cat.icon} ${esc(cat.label)} in Hanoi</h2>
