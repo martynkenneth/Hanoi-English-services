@@ -476,6 +476,33 @@ index =
   linkBlock +
   "\n      " +
   index.slice(endAt);
+
+// Tell the homepage which categories have a guide, so filtering to one can
+// offer it. Written here rather than hand-maintained, so the homepage can
+// never link to a guide that was removed or never published.
+const G_START = "// BUILD:GUIDE-SLUGS";
+const G_END = "// /BUILD:GUIDE-SLUGS";
+const gStart = index.indexOf(G_START);
+const gEnd = index.indexOf(G_END);
+if (gStart === -1 || gEnd === -1) {
+  console.error("\n✗ Could not find the BUILD:GUIDE-SLUGS markers in index.html.\n");
+  process.exit(1);
+}
+// Map category -> the guide's own opening question. Templating a sentence
+// from the category label produced things like "What do visa & immigration
+// cost in Hanoi?"; the real question is already written properly.
+const guideInfo = {};
+GUIDES.forEach((g) => {
+  const first = (g.questions || []).find((q) => q.a && q.a.trim());
+  if (first) guideInfo[g.category] = { slug: g.slug, q: first.q };
+});
+index =
+  index.slice(0, gStart + G_START.length) +
+  "\n  window.GUIDE_INFO = " +
+  JSON.stringify(guideInfo) +
+  ";\n  " +
+  index.slice(gEnd);
+
 fs.writeFileSync(indexPath, index);
 
 const today = new Date().toISOString().slice(0, 10);

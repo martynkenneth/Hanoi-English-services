@@ -271,6 +271,15 @@
   </div>
 </footer>
 
+<!--
+  Which categories have a guide page. Written by tools/build.js so the
+  homepage never links to a guide that doesn't exist.
+-->
+<script>
+  // BUILD:GUIDE-SLUGS
+  window.GUIDE_INFO = {"doctors":{"slug":"doctors","q":"How much does it cost to see a doctor in Hanoi?"},"dentists":{"slug":"dentists","q":"How much does a dentist cost in Hanoi?"},"vets":{"slug":"vets","q":"How much does a vet cost in Hanoi?"},"hairdressers":{"slug":"hairdressers","q":"How much is a haircut in Hanoi?"},"massage":{"slug":"massage","q":"How much does a massage cost in Hanoi?"},"chiropractors":{"slug":"chiropractors","q":"How much does a chiropractor cost in Hanoi?"},"lawyers":{"slug":"lawyers","q":"How much does a lawyer cost in Hanoi?"},"movers":{"slug":"movers","q":"How much does it cost to move house in Hanoi?"},"realestate":{"slug":"realestate","q":"Do I pay an estate agent fee when renting in Hanoi?"},"visa":{"slug":"visa","q":"How much does a Vietnam e-visa cost?"},"finance":{"slug":"finance","q":"How much does expat health insurance cost in Vietnam?"},"schools":{"slug":"schools","q":"How much does an international school in Hanoi cost?"},"auto":{"slug":"auto","q":"How much does it cost to rent a motorbike in Hanoi?"},"tailors":{"slug":"tailors","q":"How much does a tailored suit cost in Hanoi?"},"fitness":{"slug":"fitness","q":"How much does a gym membership cost in Hanoi?"},"homeservices":{"slug":"homeservices","q":"How much does a cleaner cost in Hanoi?"}};
+  // /BUILD:GUIDE-SLUGS
+</script>
 <script src="data/listings.js"></script>
 <script src="js/script.js"></script>
 <!-- After listings.js: the form builds its category dropdown from CATEGORIES. -->

@@ -187,6 +187,23 @@
     let totalResults = 0;
     let html = "";
 
+    // Filtering to a category is the moment someone is deciding between
+    // businesses — which is exactly when the price guide is useful. The chips
+    // filter in place rather than navigating, so without this the guides were
+    // only reachable from the links at the foot of the page.
+    const guide = (window.GUIDE_INFO || {})[activeCategory];
+    if (activeCategory && guide) {
+      html += `
+        <a class="guide-banner" href="/guides/${encodeURIComponent(guide.slug)}/">
+          <span class="guide-banner-text">
+            <strong>${esc(guide.q)}</strong>
+            Real price ranges and what to check before you book, updated August 2026.
+          </span>
+          <span class="guide-banner-cta">Read the guide →</span>
+        </a>
+      `;
+    }
+
     // Prime listings get a spotlight at the top of the homepage, across every
     // category. Only when nothing is filtered, so it never hides real results.
     const primes = CLEAN_LISTINGS.filter((l) => l.tier === "prime");

@@ -530,3 +530,33 @@ html { scroll-behavior: smooth; }
 .sources h2 { font-size: 1rem; margin: 0 0 10px; }
 .sources ul { margin: 0 0 10px; padding-left: 18px; font-size: 0.85rem; }
 .sources li { margin-bottom: 5px; color: var(--ink-soft); }
+
+/* Guide prompt shown when a category chip is active */
+.guide-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: linear-gradient(180deg, #fffdf3 0%, #fff 100%);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 20px 0 4px;
+  text-decoration: none;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.guide-banner:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+.guide-banner-text { font-size: 0.92rem; color: var(--ink-soft); }
+.guide-banner-text strong { display: block; color: var(--ink); font-size: 1rem; margin-bottom: 2px; }
+.guide-banner-cta {
+  font-weight: 700;
+  color: var(--red);
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
