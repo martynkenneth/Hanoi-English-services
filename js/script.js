@@ -134,9 +134,9 @@
     const isFeatured = listing.tier === "featured" || listing.tier === "prime";
     const badge =
       listing.tier === "prime"
-        ? `<span class="badge-featured">👑 Prime</span>`
+        ? `<span class="badge-featured badge-prime">👑 Prime</span>`
         : listing.tier === "featured"
-        ? `<span class="badge-featured">⭐ Featured</span>`
+        ? `<span class="badge-featured badge-feat">⭐ Featured</span>`
         : "";
     const phoneHref = (listing.phone || "").replace(/[^\d+]/g, "");
     const callBtn = listing.phone
@@ -172,6 +172,37 @@
         ${catNote}
         ${sampleNote}
         <div class="card-actions">${callBtn}${webBtn}</div>
+      </div>
+    `;
+  }
+
+  // Free listings render as a compact row rather than a card. Paid placement
+  // has to look different from unpaid or there is nothing to sell — but the
+  // row still carries name, description, district, English level and both
+  // contact links, because a directory whose free listings are useless stops
+  // being worth visiting at all.
+  function rowHtml(listing) {
+    const phoneHref = (listing.phone || "").replace(/[^\d+]/g, "");
+    const callBtn = listing.phone
+      ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>`
+      : "";
+    const url = safeUrl(listing.website);
+    const webBtn = url
+      ? `<a href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
+      : "";
+    const flag = listing.sample
+      ? `<span class="row-flag">🧪 sample</span>`
+      : listing.unverified
+      ? `<span class="row-flag">⚠️ unconfirmed</span>`
+      : "";
+    return `
+      <div class="row">
+        <div class="row-main">
+          <h3>${esc(listing.name)} ${flag}</h3>
+          <p class="row-desc">${esc(listing.description)}</p>
+          <div class="row-meta">📍 ${esc(listing.address || "Hanoi")} · English: ${esc(listing.englishLevel || "Unknown")}</div>
+        </div>
+        <div class="row-actions">${callBtn}${webBtn}</div>
       </div>
     `;
   }
@@ -226,12 +257,28 @@
       if (items.length === 0) return;
       totalResults += items.length;
 
+      const paid = items.filter(
+        (l) => l.tier === "prime" || l.tier === "featured"
+      );
+      const free = items.filter(
+        (l) => l.tier !== "prime" && l.tier !== "featured"
+      );
+
       html += `
         <section class="category-section">
           <h2 class="category-title">${cat.icon} ${esc(cat.label)} <span class="count">(${items.length})</span></h2>
-          <div class="card-grid">
-            ${items.map((l) => cardHtml(l, false)).join("")}
-          </div>
+          ${
+            paid.length
+              ? `<div class="card-grid">${paid
+                  .map((l) => cardHtml(l, false))
+                  .join("")}</div>`
+              : ""
+          }
+          ${
+            free.length
+              ? `<div class="listing-list">${free.map(rowHtml).join("")}</div>`
+              : ""
+          }
         </section>
       `;
     });

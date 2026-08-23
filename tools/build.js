@@ -106,9 +106,9 @@ const TIER_ORDER = { prime: 0, featured: 1, free: 2 };
 function cardHtml(l) {
   const badge =
     l.tier === "prime"
-      ? '<span class="badge-featured">👑 Prime</span>'
+      ? '<span class="badge-featured badge-prime">👑 Prime</span>'
       : l.tier === "featured"
-      ? '<span class="badge-featured">⭐ Featured</span>'
+      ? '<span class="badge-featured badge-feat">⭐ Featured</span>'
       : "";
   const phoneHref = (l.phone || "").replace(/[^\d+]/g, "");
   const call = l.phone ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>` : "";
@@ -124,6 +124,34 @@ function cardHtml(l) {
         <div class="meta">📍 ${esc(l.address || "Hanoi")}</div>
         <div class="card-actions">${call}${web}</div>
       </div>`;
+}
+
+// Free listings render as a compact row, paid ones keep the card. Paid
+// placement has to look different from unpaid or there is nothing to sell.
+// The row still carries everything a reader needs, though — a directory whose
+// free listings are useless stops being worth visiting.
+function rowHtml(l) {
+  const phoneHref = (l.phone || "").replace(/[^\d+]/g, "");
+  const call = l.phone ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>` : "";
+  const url = safeUrl(l.website);
+  const web = url ? `<a href="${url}" target="_blank" rel="noopener">🌐 Website</a>` : "";
+  return `      <div class="row">
+        <div class="row-main">
+          <h3>${esc(l.name)}</h3>
+          <p class="row-desc">${esc(l.description)}</p>
+          <div class="row-meta">📍 ${esc(l.address || "Hanoi")} · English: ${esc(l.englishLevel || "Unknown")}</div>
+        </div>
+        <div class="row-actions">${call}${web}</div>
+      </div>`;
+}
+
+function listingsHtml(items) {
+  const paid = items.filter((l) => l.tier === "prime" || l.tier === "featured");
+  const free = items.filter((l) => l.tier !== "prime" && l.tier !== "featured");
+  let out = "";
+  if (paid.length) out += `    <div class="card-grid">\n${paid.map(cardHtml).join("\n")}\n    </div>\n`;
+  if (free.length) out += `    <div class="listing-list">\n${free.map(rowHtml).join("\n")}\n    </div>\n`;
+  return out;
 }
 
 // Structured data, so search engines read these as real businesses with real
@@ -233,9 +261,7 @@ ${jsonLd(cat, items)}
     <a class="link-btn" href="${SITE}/">← All categories</a>
   </div>
   <section class="category-section">
-    <div class="card-grid">
-${items.map(cardHtml).join("\n")}
-    </div>
+${listingsHtml(items)}
   </section>
 
 ${guideLinkFor(cat)}
@@ -400,9 +426,7 @@ ${guide.sources
   <section class="category-section">
     <h2 class="category-title">${cat.icon} ${esc(cat.label)} in Hanoi</h2>
     <p class="guide-lede">${items.length} ${esc(cat.label.toLowerCase())} with English-speaking staff, each confirmed by phone.</p>
-    <div class="card-grid">
-${items.map(cardHtml).join("\n")}
-    </div>
+${listingsHtml(items)}
     <p class="guide-lede"><a href="${SITE}/${cat.key}/">See the full ${esc(cat.label.toLowerCase())} listing →</a></p>
   </section>
 </main>

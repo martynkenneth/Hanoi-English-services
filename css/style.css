@@ -197,7 +197,11 @@ a { color: var(--red); }
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* auto-fit rather than auto-fill so a single paid card stretches instead of
+     sitting in a narrow column beside empty space — a Prime listing has to
+     visibly outweigh the free rows underneath it. Capped so two cards still
+     sit side by side rather than one spanning the page. */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 420px));
   gap: 16px;
 }
 
@@ -220,15 +224,24 @@ a { color: var(--red); }
 }
 .badge-featured {
   position: absolute;
-  top: -10px;
+  top: -13px;
   right: 14px;
   background: var(--gold);
   color: #4a3900;
-  font-size: 0.72rem;
+  font-size: 0.88rem;
   font-weight: 800;
-  padding: 3px 10px;
+  letter-spacing: 0.01em;
+  padding: 6px 16px;
   border-radius: 999px;
   box-shadow: var(--shadow);
+}
+/* Prime is the one-per-category slot, so it outranks Featured visually too. */
+.badge-prime {
+  background: var(--red);
+  color: #fff;
+  font-size: 0.95rem;
+  padding: 7px 18px;
+  box-shadow: 0 3px 12px rgba(218, 37, 29, 0.35);
 }
 .card h3 {
   margin: 4px 0 6px;
@@ -559,4 +572,68 @@ html { scroll-behavior: smooth; }
   color: var(--red);
   white-space: nowrap;
   font-size: 0.9rem;
+}
+
+/* Free listings: compact rows beneath the paid cards. Deliberately quieter,
+   but they keep description, district, English level and both contact links —
+   a directory whose free listings are useless is not worth visiting. */
+.listing-list {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  overflow: hidden;
+  margin-top: 14px;
+}
+.card-grid + .listing-list { margin-top: 18px; }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: #fcfbf9; }
+.row-main { flex: 1 1 320px; min-width: 0; }
+.row-main h3 {
+  margin: 0 0 2px;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+.row-desc {
+  margin: 0 0 4px;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+.row-meta {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  opacity: 0.85;
+}
+.row-flag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.row-actions a {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  white-space: nowrap;
+}
+.row-actions a:hover { border-color: var(--red); color: var(--red); }
+@media (max-width: 520px) {
+  .row { align-items: flex-start; }
+  .row-actions { width: 100%; }
 }
