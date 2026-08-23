@@ -71,11 +71,11 @@ const LISTINGS = [
     id: "hanoi-greenfield-dental",
     name: "Greenfield Dental",
     category: "dentists",
-    description: "Full-service dental clinic in Yen Hoa, English-speaking, check-ups to implants.",
+    description: "Full-service dental clinic with English-speaking staff, from check-ups to implants.",
     address: "95 Trung Hoa, Yen Hoa Ward, Hanoi",
     phone: "+84 822 367 999",
     website: "https://greenfield.clinic",
-    englishLevel: "Good",
+    englishLevel: "Fluent",
     tier: "prime",
     dateAdded: "2026-08-23",
     verify: "https://maps.app.goo.gl/a5JiCxizqrfifKLT6"
