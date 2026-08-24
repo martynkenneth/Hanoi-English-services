@@ -113,12 +113,15 @@ function cardHtml(l) {
   const phoneHref = (l.phone || "").replace(/[^\d+]/g, "");
   const call = l.phone ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>` : "";
   const ref = safeUrl(l.referralUrl);
-  const url = ref || safeUrl(l.website);
+  const url = safeUrl(l.website);
   const web = url
-    ? `<a class="primary" href="${url}" target="_blank" rel="noopener${ref ? " sponsored nofollow" : ""}">🌐 Website</a>`
+    ? `<a class="${ref ? "" : "primary"}" href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
+    : "";
+  const book = ref
+    ? `<a class="primary" href="${ref}" target="_blank" rel="noopener sponsored nofollow">📅 Book</a>`
     : "";
   const refNote = ref
-    ? '<div class="meta ref-note">Booking link — we may earn a referral fee. It does not affect placement.</div>'
+    ? '<div class="meta ref-note">We may earn a fee if you book through this link. It does not affect placement.</div>'
     : "";
   return `      <div class="card ${l.tier === "free" ? "" : "featured"}">
         ${badge}
@@ -127,7 +130,7 @@ function cardHtml(l) {
         <p class="desc">${esc(l.description)}</p>
         <div class="meta">📍 ${esc(l.address || "Hanoi")}</div>
         ${refNote}
-        <div class="card-actions">${call}${web}</div>
+        <div class="card-actions">${call}${web}${book}</div>
       </div>`;
 }
 
@@ -139,9 +142,10 @@ function rowHtml(l) {
   const phoneHref = (l.phone || "").replace(/[^\d+]/g, "");
   const call = l.phone ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>` : "";
   const ref = safeUrl(l.referralUrl);
-  const url = ref || safeUrl(l.website);
-  const web = url
-    ? `<a href="${url}" target="_blank" rel="noopener${ref ? " sponsored nofollow" : ""}">🌐 Website</a>`
+  const url = safeUrl(l.website);
+  const web = url ? `<a href="${url}" target="_blank" rel="noopener">🌐 Website</a>` : "";
+  const book = ref
+    ? `<a href="${ref}" target="_blank" rel="noopener sponsored nofollow">📅 Book</a>`
     : "";
   return `      <div class="row">
         <div class="row-main">
@@ -149,7 +153,7 @@ function rowHtml(l) {
           <p class="row-desc">${esc(l.description)}</p>
           <div class="row-meta">📍 ${esc(l.address || "Hanoi")} · English: ${esc(l.englishLevel || "Unknown")}</div>
         </div>
-        <div class="row-actions">${call}${web}</div>
+        <div class="row-actions">${call}${web}${book}</div>
       </div>`;
 }
 

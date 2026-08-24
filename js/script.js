@@ -142,17 +142,21 @@
     const callBtn = listing.phone
       ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>`
       : "";
-    // A referral link earns us a commission, so it carries rel="sponsored" as
-    // Google asks, and the listing says so plainly. Undisclosed affiliate
-    // links are the one thing that would undermine a directory whose whole
-    // pitch is that it is honest.
+    // A referral link is an extra button, not a replacement for the website.
+    // Someone clicking "Website" expects the clinic's own site, and sending
+    // them through a partner funnel instead would be a small dishonesty.
+    // It carries rel="sponsored" as Google asks for paid links, and the card
+    // says plainly that a fee may be earned.
     const ref = safeUrl(listing.referralUrl);
-    const url = ref || safeUrl(listing.website);
+    const url = safeUrl(listing.website);
     const webBtn = url
-      ? `<a class="primary" href="${url}" target="_blank" rel="noopener${ref ? " sponsored nofollow" : ""}">🌐 Website</a>`
+      ? `<a class="${ref ? "" : "primary"}" href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
+      : "";
+    const bookBtn = ref
+      ? `<a class="primary" href="${ref}" target="_blank" rel="noopener sponsored nofollow">📅 Book</a>`
       : "";
     const refNote = ref
-      ? `<div class="meta ref-note">Booking link — we may earn a referral fee. It does not affect placement.</div>`
+      ? `<div class="meta ref-note">We may earn a fee if you book through this link. It does not affect placement.</div>`
       : "";
     // Two different states, deliberately worded differently: a sample is
     // invented and must go, whereas an unverified listing is a real business
@@ -180,7 +184,7 @@
         ${catNote}
         ${sampleNote}
         ${refNote}
-        <div class="card-actions">${callBtn}${webBtn}</div>
+        <div class="card-actions">${callBtn}${webBtn}${bookBtn}</div>
       </div>
     `;
   }
@@ -196,9 +200,12 @@
       ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>`
       : "";
     const ref = safeUrl(listing.referralUrl);
-    const url = ref || safeUrl(listing.website);
+    const url = safeUrl(listing.website);
     const webBtn = url
-      ? `<a href="${url}" target="_blank" rel="noopener${ref ? " sponsored nofollow" : ""}">🌐 Website</a>`
+      ? `<a href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
+      : "";
+    const bookBtn = ref
+      ? `<a href="${ref}" target="_blank" rel="noopener sponsored nofollow">📅 Book</a>`
       : "";
     const flag = listing.sample
       ? `<span class="row-flag">🧪 sample</span>`
@@ -212,7 +219,7 @@
           <p class="row-desc">${esc(listing.description)}</p>
           <div class="row-meta">📍 ${esc(listing.address || "Hanoi")} · English: ${esc(listing.englishLevel || "Unknown")}</div>
         </div>
-        <div class="row-actions">${callBtn}${webBtn}</div>
+        <div class="row-actions">${callBtn}${webBtn}${bookBtn}</div>
       </div>
     `;
   }

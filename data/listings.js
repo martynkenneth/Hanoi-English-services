@@ -55,8 +55,9 @@ const LISTINGS = [
     tier: "free",       // "free", "featured" or "prime"
     dateAdded: "",      // "2026-08-13"
     unverified: true    // delete this line once you've confirmed phone+address
-    // referralUrl: ""  // optional: affiliate link. If set, it replaces the
-                        // website link and the card discloses the fee.
+    // referralUrl: ""  // optional: affiliate link. Adds a "Book" button
+                        // alongside the website link, and the card discloses
+                        // that a fee may be earned.
   },
 
      ------------------------------------------------------------------
@@ -80,6 +81,7 @@ const LISTINGS = [
     englishLevel: "Fluent",
     tier: "prime",
     dateAdded: "2026-08-23",
+    referralUrl: "https://aff.greenfield.clinic/hnexpatdirectory",
     verify: "https://maps.app.goo.gl/a5JiCxizqrfifKLT6"
   },
   {
