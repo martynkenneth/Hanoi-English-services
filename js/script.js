@@ -142,9 +142,17 @@
     const callBtn = listing.phone
       ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>`
       : "";
-    const url = safeUrl(listing.website);
+    // A referral link earns us a commission, so it carries rel="sponsored" as
+    // Google asks, and the listing says so plainly. Undisclosed affiliate
+    // links are the one thing that would undermine a directory whose whole
+    // pitch is that it is honest.
+    const ref = safeUrl(listing.referralUrl);
+    const url = ref || safeUrl(listing.website);
     const webBtn = url
-      ? `<a class="primary" href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
+      ? `<a class="primary" href="${url}" target="_blank" rel="noopener${ref ? " sponsored nofollow" : ""}">🌐 Website</a>`
+      : "";
+    const refNote = ref
+      ? `<div class="meta ref-note">Booking link — we may earn a referral fee. It does not affect placement.</div>`
       : "";
     // Two different states, deliberately worded differently: a sample is
     // invented and must go, whereas an unverified listing is a real business
@@ -171,6 +179,7 @@
         <div class="meta">📍 ${esc(listing.address || "Hanoi")}</div>
         ${catNote}
         ${sampleNote}
+        ${refNote}
         <div class="card-actions">${callBtn}${webBtn}</div>
       </div>
     `;
@@ -186,9 +195,10 @@
     const callBtn = listing.phone
       ? `<a href="tel:${esc(phoneHref)}">📞 Call</a>`
       : "";
-    const url = safeUrl(listing.website);
+    const ref = safeUrl(listing.referralUrl);
+    const url = ref || safeUrl(listing.website);
     const webBtn = url
-      ? `<a href="${url}" target="_blank" rel="noopener">🌐 Website</a>`
+      ? `<a href="${url}" target="_blank" rel="noopener${ref ? " sponsored nofollow" : ""}">🌐 Website</a>`
       : "";
     const flag = listing.sample
       ? `<span class="row-flag">🧪 sample</span>`

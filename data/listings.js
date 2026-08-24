@@ -55,6 +55,8 @@ const LISTINGS = [
     tier: "free",       // "free", "featured" or "prime"
     dateAdded: "",      // "2026-08-13"
     unverified: true    // delete this line once you've confirmed phone+address
+    // referralUrl: ""  // optional: affiliate link. If set, it replaces the
+                        // website link and the card discloses the fee.
   },
 
      ------------------------------------------------------------------
