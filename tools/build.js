@@ -103,6 +103,24 @@ function safeUrl(url) {
 
 const TIER_ORDER = { prime: 0, featured: 1, free: 2 };
 
+// A page must never claim more verification than it has. These count what is
+// actually confirmed rather than asserting a blanket fact — the claim that
+// every listing was phoned is the directory's whole differentiator, so it has
+// to survive a reader checking it.
+function confirmedLine(items) {
+  const unconfirmed = items.filter((l) => l.unverified || l.sample).length;
+  const n = items.length;
+  const plural = n === 1 ? "" : "s";
+  if (unconfirmed === 0) return `${n} listing${plural}, all confirmed by phone`;
+  return `${n} listing${plural}, ${n - unconfirmed} confirmed by phone`;
+}
+
+function confirmedSuffix(items) {
+  const unconfirmed = items.filter((l) => l.unverified || l.sample).length;
+  if (unconfirmed === 0) return "Each one confirmed by phone.";
+  return `${items.length - unconfirmed} of ${items.length} confirmed by phone so far.`;
+}
+
 function cardHtml(l) {
   const badge =
     l.tier === "prime"
@@ -123,12 +141,18 @@ function cardHtml(l) {
   const refNote = ref
     ? '<div class="meta ref-note">We may earn a fee if you book through this link. It does not affect placement.</div>'
     : "";
+  const stateNote = l.sample
+    ? '<div class="meta">🧪 sample listing — replace with a real business</div>'
+    : l.unverified
+    ? '<div class="meta">⚠️ details not confirmed yet — please check before visiting</div>'
+    : "";
   return `      <div class="card ${l.tier === "free" ? "" : "featured"}">
         ${badge}
         <span class="english-level">English: ${esc(l.englishLevel || "Unknown")}</span>
         <h3>${esc(l.name)}</h3>
         <p class="desc">${esc(l.description)}</p>
         <div class="meta">📍 ${esc(l.address || "Hanoi")}</div>
+        ${stateNote}
         ${refNote}
         <div class="card-actions">${call}${web}${book}</div>
       </div>`;
@@ -147,9 +171,14 @@ function rowHtml(l) {
   const book = ref
     ? `<a href="${ref}" target="_blank" rel="noopener sponsored nofollow">📅 Book</a>`
     : "";
+  const flag = l.sample
+    ? ' <span class="row-flag">🧪 sample</span>'
+    : l.unverified
+    ? ' <span class="row-flag">⚠️ unconfirmed</span>'
+    : "";
   return `      <div class="row">
         <div class="row-main">
-          <h3>${esc(l.name)}</h3>
+          <h3>${esc(l.name)}${flag}</h3>
           <p class="row-desc">${esc(l.description)}</p>
           <div class="row-meta">📍 ${esc(l.address || "Hanoi")} · English: ${esc(l.englishLevel || "Unknown")}</div>
         </div>
@@ -269,7 +298,7 @@ ${jsonLd(cat, items)}
 
 <main class="wrap">
   <div class="results-bar">
-    <span>${items.length} listing${items.length === 1 ? "" : "s"}, all confirmed by phone</span>
+    <span>${confirmedLine(items)}</span>
     <a class="link-btn" href="${SITE}/">← All categories</a>
   </div>
   <section class="category-section">
@@ -296,7 +325,7 @@ ${guideLinkFor(cat)}
 <footer class="site-footer">
   <div class="wrap">
     <p>Made by expats living in Hanoi. Spotted something out of date? <a href="mailto:martynsessford@gmail.com">Let us know</a>.</p>
-    <p class="fine-print">Every listing here was confirmed by phone. Details change — please check with the business before visiting.</p>
+    <p class="fine-print">Listings are confirmed by phone before being marked verified. Details change — please check with the business before visiting.</p>
   </div>
 </footer>
 
@@ -437,7 +466,7 @@ ${guide.sources
 
   <section class="category-section">
     <h2 class="category-title">${cat.icon} ${esc(cat.label)} in Hanoi</h2>
-    <p class="guide-lede">${items.length} ${esc(cat.label.toLowerCase())} with English-speaking staff, each confirmed by phone.</p>
+    <p class="guide-lede">${items.length} ${esc(cat.label.toLowerCase())} with English-speaking staff. ${confirmedSuffix(items)}</p>
 ${listingsHtml(items)}
     <p class="guide-lede"><a href="${SITE}/${cat.key}/">See the full ${esc(cat.label.toLowerCase())} listing →</a></p>
   </section>
@@ -446,7 +475,7 @@ ${listingsHtml(items)}
 <footer class="site-footer">
   <div class="wrap">
     <p>Made by expats living in Hanoi. Something out of date? <a href="mailto:martynsessford@gmail.com">Let us know</a>.</p>
-    <p class="fine-print">Every business listed here was confirmed by phone. Prices and details change — please check directly before booking.</p>
+    <p class="fine-print">Listings are confirmed by phone before being marked verified. Prices and details change — please check directly before booking.</p>
   </div>
 </footer>
 

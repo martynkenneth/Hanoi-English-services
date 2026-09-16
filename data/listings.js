@@ -74,7 +74,7 @@ const LISTINGS = [
     id: "hanoi-just-cruizin",
     name: "Just Cruizin' Hanoi",
     category: "auto",
-    description: "Commuter scooters, sports bikes and motorcycles for rent or sale in Tay Ho.",
+    description: "Commuters, sporty scooters and motorcycles for rent and sale, Western-friendly.",
     address: "154/56 Tu Lien, Tay Ho, Hanoi",
     phone: "+84 904 563 588",
     website: "https://www.facebook.com/justcruizinhanoi",
