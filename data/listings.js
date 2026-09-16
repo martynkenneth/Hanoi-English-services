@@ -71,6 +71,20 @@ const LISTINGS = [
      going blank, and GitHub emails you within a minute of pushing.
      ------------------------------------------------------------------ */
   {
+    id: "hanoi-kensington-real-estate",
+    name: "Kensington Vietnam Real Estate",
+    category: "realestate",
+    description: "Helps international clients buy, sell and rent property in Hanoi and Vietnam.",
+    address: "VEAM Tower, 689 Lac Long Quan Street, Tay Ho Ward, Hanoi",
+    phone: "+84 967 930 960",
+    website: "https://houseinhanoi.vn/",
+    englishLevel: "Fluent",
+    tier: "free",
+    dateAdded: "2026-09-16",
+    unverified: true,
+    verify: "https://www.google.com/maps/search/?api=1&query=Kensington+Vietnam+Real+Estate+VEAM+Tower+Hanoi"
+  },
+  {
     id: "hanoi-greenfield-dental",
     name: "Greenfield Dental",
     category: "dentists",
