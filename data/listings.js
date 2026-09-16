@@ -71,6 +71,20 @@ const LISTINGS = [
      going blank, and GitHub emails you within a minute of pushing.
      ------------------------------------------------------------------ */
   {
+    id: "hanoi-just-cruizin",
+    name: "Just Cruizin' Hanoi",
+    category: "auto",
+    description: "Commuter scooters, sports bikes and motorcycles for rent or sale in Tay Ho.",
+    address: "154/56 Tu Lien, Tay Ho, Hanoi",
+    phone: "+84 904 563 588",
+    website: "https://www.facebook.com/justcruizinhanoi",
+    englishLevel: "Fluent",
+    tier: "free",
+    dateAdded: "2026-09-16",
+    unverified: true,
+    verify: "https://www.google.com/maps/search/?api=1&query=Just+Cruizin+Hanoi+Tu+Lien+Tay+Ho"
+  },
+  {
     id: "hanoi-kensington-real-estate",
     name: "Kensington Vietnam Real Estate",
     category: "realestate",
