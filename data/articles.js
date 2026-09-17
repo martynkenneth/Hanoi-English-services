@@ -175,4 +175,91 @@ const ARTICLES = [
       ["VisaInfo published agency fee table", "https://visainfo.vn/en/service-fees"],
     ],
   },
+  {
+    slug: "choosing-a-yoga-class-in-hanoi",
+    category: "fitness",
+    title: "Yoga in Hanoi: How to Choose a Class That Suits You",
+    intro:
+      "Hanoi has plenty of studios and most will happily take your money for whichever class you pick. Choosing well takes about five minutes of asking, and the questions worth asking are not the obvious ones.",
+    asOf: "September 2026",
+    sections: [
+      {
+        heading: "Do not choose a class by its style name",
+        body:
+          "The style name is the least reliable guide to what a class will actually be like. Two classes sharing a name, at different studios or even with different teachers at the same studio, can differ in pace, intensity and focus far more than the label suggests. Read the class description rather than the title, and if it is still unclear, ask before you book rather than finding out on the mat.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "Choosing a class based only on the style name. A Vinyasa or Hatha class can feel very different depending on the teacher, pace and focus. We always recommend checking the class description and asking the studio if you are unsure which class would suit you.",
+        },
+      },
+      {
+        heading: "Ask whether the class is taught in English",
+        body:
+          "It sounds obvious, and it is still the question Hanoi studios field most often from foreign residents. A class listed in English on a website is not always taught in English on the day, particularly when a teacher is covering for someone else. Ask when you book rather than when you arrive.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "“Is the class taught in English?” is probably the question we hear most. Language can make a big difference, especially when you are trying a new teacher or style, so we always encourage international guests to ask before booking.",
+        },
+      },
+      {
+        heading: "What to bring to your first class",
+        body:
+          "Less than most people expect. Studios in Hanoi generally provide mats and props, so comfortable clothes and water are usually enough. Arrive early enough to find the room and speak to the teacher, and mention any injury or limitation before the class starts rather than halfway through it.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "Not much. Comfortable clothes and a water bottle are enough. We provide mats and props. We recommend arriving 10 to 15 minutes early for your first class and letting the teacher know about any injuries or limitations before class.",
+        },
+      },
+      {
+        heading: "How the pricing works",
+        body:
+          "Yoga in Hanoi is generally sold either as a single drop-in class or as a package, and the price per class falls substantially with the package. That is the main variable, so work out roughly how often you will realistically attend before buying either. A studio that publishes both prices clearly is much easier to compare than one that quotes only on request.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "For regular yoga classes, pricing mainly depends on whether you book a single class or a package. There should not really be a surprise final bill — we believe prices and policies should be clear before you book.",
+        },
+      },
+      {
+        heading: "Cheaper is not the same as better value",
+        body:
+          "Price per class is the easiest thing to compare and the least informative. Class size changes how much attention you get, and a packed class with an excellent teacher can still be worse for a beginner than a quiet one with an average teacher. Ask how many people are usually in the room at the time you would actually attend, not the studio's capacity.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "Look beyond the price per class. Class size, teacher quality, the amount of individual attention you receive, the space and the overall experience can be very different from one studio to another. The cheapest class is not necessarily the best value for you, and neither is the most expensive one.",
+        },
+      },
+      {
+        heading: "You do not need to be flexible to start",
+        body:
+          "The most common reason people give for not trying a class is the one teachers hear as a misunderstanding. Flexibility is an outcome rather than an entry requirement, and a beginner in a room of experienced practitioners is entirely normal rather than conspicuous.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "You do not need to be flexible, experienced, or have a “yoga body” to join a class. And you do not have to commit to one style straight away. Try different teachers and practices and find what works for your body and what you need at that moment.",
+        },
+      },
+      {
+        heading: "Message the studio before you book",
+        body:
+          "This matters most if you are in Hanoi briefly and cannot afford to waste a session on the wrong class. A studio used to international guests will recommend something based on your experience and what you want from it. How they answer tells you as much about the studio as the recommendation does about the class.",
+        quote: {
+          business: "SAGE Wellness",
+          person: "Huệ Trần",
+          role: "Founder",
+          text: "If you are staying in Hanoi for a short time, do not be afraid to contact a studio before booking. A good studio should be able to recommend a class based on your experience, energy level and what you are looking for, whether that is movement, mobility, strength or simply slowing down.",
+        },
+      },
+    ],
+  },
 ];
