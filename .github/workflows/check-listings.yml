@@ -10,6 +10,7 @@ on:
     paths:
       - "data/listings.js"
       - "data/guides.js"
+      - "data/articles.js"
       - "js/script.js"
       - "index.html"
       - "tools/check-listings.js"
@@ -18,6 +19,7 @@ on:
     paths:
       - "data/listings.js"
       - "data/guides.js"
+      - "data/articles.js"
       - "js/script.js"
       - "index.html"
       - "tools/check-listings.js"
@@ -42,6 +44,7 @@ jobs:
           node --check js/script.js
           node --check data/listings.js
           node --check data/guides.js
+          node --check data/articles.js
           node --check tools/build.js
 
       - name: Check every listing is usable
