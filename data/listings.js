@@ -71,6 +71,20 @@ const LISTINGS = [
      going blank, and GitHub emails you within a minute of pushing.
      ------------------------------------------------------------------ */
   {
+    id: "hanoi-sage-wellness",
+    name: "SAGE Wellness",
+    category: "fitness",
+    description: "Yoga and wellness studio in Tay Ho. Mats and props provided, beginners welcome.",
+    address: "2F, No. 7, Alley 12/2 Đặng Thai Mai, Tây Hồ, Hanoi",
+    phone: "+84 967 319 606",
+    website: "https://sagewellness.vn",
+    englishLevel: "Good",
+    tier: "free",
+    dateAdded: "2026-09-17",
+    unverified: true,
+    verify: "https://www.google.com/maps/search/?api=1&query=SAGE+Wellness+Dang+Thai+Mai+Tay+Ho+Hanoi"
+  },
+  {
     id: "hanoi-just-cruizin",
     name: "Just Cruizin' Hanoi",
     category: "auto",
