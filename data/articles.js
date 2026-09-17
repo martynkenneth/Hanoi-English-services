@@ -47,26 +47,57 @@ const ARTICLES = [
       {
         heading: "What the price does not include",
         body:
-          "This is where the real difference between shops shows up. Servicing and mechanical breakdown are commonly covered on a monthly rental; damage and punctures almost never are. Before you pay, get a clear answer on who pays for a flat tyre, what happens if the bike is stolen, whether there is a kilometre limit, and whether breakdown support extends outside Hanoi. A shop used to foreign customers will volunteer all of this without being asked, which is itself a useful signal.",
-        quote: { business: "", text: "" },
+          "This is where the real difference between shops shows up. Servicing and mechanical breakdown are commonly covered on a monthly rental; damage and punctures almost never are. Before you pay, get a clear answer on who pays for a flat tyre, what happens if the bike is stolen, whether there is a kilometre limit, and whether breakdown support extends outside Hanoi. A shop used to foreign customers will volunteer all of this without being asked, which is itself a useful signal. The obligation runs both ways, though: a monthly rate that includes servicing assumes you actually turn up for the service.",
+        quote: {
+          business: "Just Cruizin' Hanoi",
+          person: "To Hoai Lam",
+          role: "Founder",
+          text: "Making sure a motorbike deal is smooth sailing requires effort on both ends. As much as we are responsible for ensuring the units provided are safe and reliable, they need to be serviced on time and operated correctly. The most common mistake is thinking it is all about getting on a bike and riding, and not telling us about problems at their early stages.",
+        },
+      },
+      {
+        heading: "Electric or petrol?",
+        body:
+          "Asked what customers ask most often, Just Cruizin' answered in two words. Electric bikes are now common enough in Hanoi that this is the first decision rather than an afterthought, and the answer depends less on the bike than on where you live. Charging is the deciding factor: if you cannot charge where you park, an electric bike is impractical however good it is, and some apartment buildings restrict charging. Ask about realistic range for the riding you actually do, where you would charge, and what happens if you run out mid-journey. If you plan trips outside the city, ask specifically about charging along the route.",
+        quote: {
+          business: "Just Cruizin' Hanoi",
+          person: "To Hoai Lam",
+          role: "Founder",
+          text: "EV or fuel?",
+        },
       },
       {
         heading: "Do not leave your passport",
         body:
-          "Some rental shops ask to hold your passport as security. You are not obliged to agree, and you should not: you may need it for a hotel, a bank, a clinic or a flight at no notice, and recovering it from a shop in a dispute is far harder than recovering a cash deposit. Offer a cash deposit or a photocopy instead. A shop that refuses any alternative is telling you something about how a disagreement would go.",
-        quote: { business: "", text: "" },
+          "Some rental shops ask to hold your passport as security. You are not obliged to agree, and you should not: you may need it for a hotel, a bank, a clinic or a flight at no notice, and recovering it from a shop in a dispute is far harder than recovering a cash deposit. A photo of the information pages plus a cash deposit is normal practice at shops used to foreign customers, and a shop that will accept nothing less than the physical document is telling you how a disagreement would go.",
+        quote: {
+          business: "Just Cruizin' Hanoi",
+          person: "To Hoai Lam",
+          role: "Founder",
+          text: "We require a photo of their passport info pages, rent and deposit cash, basic driving skills, and road rule knowledge.",
+        },
       },
       {
         heading: "The licence question people get wrong",
         body:
-          "What you legally need depends on the engine size of the bike you are actually riding, not on what you rode at home. This matters far more than the fine: riding without the correct licence can void your travel or health insurance entirely, which turns a minor accident into a very expensive one. Check your own position before you ride, and check that any paperwork a shop provides is genuine.",
-        quote: { business: "", text: "" },
+          "What you legally need depends on the engine size of the bike you are actually riding, not on what you rode at home. This matters more than the fine in two ways: riding without the correct licence can void your travel or health insurance entirely, and a bike stopped without the right paperwork can be confiscated — which is your rental shop's asset, and becomes your problem. Check your own position before you ride, and check that any paperwork a shop provides is genuine.",
+        quote: {
+          business: "Just Cruizin' Hanoi",
+          person: "To Hoai Lam",
+          role: "Founder",
+          text: "It is not just about getting on and riding. It is also about knowing your bike, your expectations of it, how to operate it, and what you can do to help your service provider make sure it does not run out of oil or get confiscated.",
+        },
       },
       {
         heading: "Checking the bike before you take it",
         body:
-          "Photograph the bike from every angle before you ride away, including existing scratches, and make sure the shop sees you do it. Check the brakes, the lights, the horn and the tyre tread. Confirm the registration paperwork is in the bike and ask what to do if you are stopped. Five minutes here prevents the most common dispute in Hanoi bike rental, which is an argument about damage that was already there.",
-        quote: { business: "", text: "" },
+          "Photograph the bike from every angle before you ride away, including existing scratches, and make sure the shop sees you do it. Check the brakes, the lights, the horn and the tyre tread. Confirm the registration paperwork is in the bike and ask what to do if you are stopped. Five minutes here prevents the most common dispute in Hanoi bike rental, which is an argument about damage that was already there. Getting the right bike in the first place matters just as much as checking it.",
+        quote: {
+          business: "Just Cruizin' Hanoi",
+          person: "To Hoai Lam",
+          role: "Founder",
+          text: "Know what you want, what you are capable of, and choose the right unit from the get go.",
+        },
       },
     ],
     sources: [
