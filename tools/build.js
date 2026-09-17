@@ -586,7 +586,9 @@ ${a.asOf ? `    <p class="checked">Written ${esc(a.asOf)}. Prices and rules chan
         x.quote && x.quote.text && x.quote.business
           ? `\n      <blockquote class="biz-quote">
         <p>${esc(x.quote.text)}</p>
-        <cite>${esc(x.quote.business)}</cite>
+        <cite>${esc(
+          [x.quote.person, x.quote.role].filter(Boolean).join(", ")
+        )}${x.quote.person ? " — " : ""}${esc(x.quote.business)}</cite>
       </blockquote>`
           : ""
       }

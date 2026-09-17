@@ -73,5 +73,75 @@ const ARTICLES = [
       ["Offroad Vietnam published rental prices", "https://offroadvietnam.com/prices"],
       ["James Motorbikes rental policy", "https://jamesmotorbikes.com/policy/"],
     ],
+  },,
+  {
+    slug: "how-long-does-a-vietnam-visa-take",
+    category: "visa",
+    title: "How Long Does a Vietnam Visa Take? What Affects Timing and Cost",
+    intro:
+      "The honest answer is that it depends on your passport. Processing time, paperwork and price all shift with nationality, visa type and how much notice you give — which is why two people applying the same week can have very different experiences.",
+    asOf: "September 2026",
+    sections: [
+      {
+        heading: "Why there is no single answer",
+        body:
+          "Most guides quote one processing time. In practice it varies with nationality, the visa you are applying for, and how quickly the Immigration Department approves your case. Official fees are published — a single-entry e-visa is US$25 and multiple-entry US$50 — but nothing on the official portal promises a turnaround that applies to everyone. Treat any figure you are quoted as an estimate rather than a guarantee, and check the government site for current requirements rather than relying on an older account.",
+        quote: {
+          business: "VietnamVisaVOA.com",
+          person: "Gracie",
+          role: "Visa Consultant",
+          text: "The most common mistake is waiting until the last minute. Many travellers assume the process is always immediate, but processing times can vary depending on nationality, visa type, and Immigration Department approval.",
+        },
+      },
+      {
+        heading: "Your nationality changes more than you would expect",
+        body:
+          "This is the part that catches people out, particularly anyone comparing notes with a friend who applied recently. Two applicants submitting identical paperwork on the same day can face different requirements, different processing times and different costs, purely because of their passport. Advice from someone of another nationality is worth very little here, however recent it is.",
+        quote: {
+          business: "VietnamVisaVOA.com",
+          person: "Gracie",
+          role: "Visa Consultant",
+          text: "Vietnam visa requirements are not always the same for everyone. Nationality, travel history, purpose of travel, and entry dates can all affect the process. Providing complete and accurate information from the beginning usually makes everything much smoother.",
+        },
+      },
+      {
+        heading: "What to have ready before you start",
+        body:
+          "Gathering documents first is the single easiest way to avoid delay, because an application that stalls halfway while you find a booking confirmation loses days rather than minutes. Have the basics to hand before you begin, and expect that some nationalities will be asked for more.",
+        quote: {
+          business: "VietnamVisaVOA.com",
+          person: "Gracie",
+          role: "Visa Consultant",
+          text: "A clear, valid passport copy, travel dates, flight details, and accommodation information are a good starting point. Depending on the nationality and visa type, additional documents or travel history may be required.",
+        },
+      },
+      {
+        heading: "What actually moves the price",
+        body:
+          "The government fee is the smaller and more predictable part of what you pay. An e-visa costs US$25 or US$50 depending on entries; agents typically add US$10–49 for handling, and rush processing can add US$65–80 on top. Work permits and residence cards follow the same pattern: the Hanoi work permit state fee is 400,000₫, while agency packages start around 4,230,000₫ because document preparation is the real work. Ask any agent to itemise government fee, service fee, translation, notarisation and any rush charge separately.",
+        quote: {
+          business: "VietnamVisaVOA.com",
+          person: "Gracie",
+          role: "Visa Consultant",
+          text: "The main factors are visa type, nationality, processing speed, and whether additional services such as airport fast-track assistance are needed. Some people are surprised that urgent processing and special handling for certain nationalities can cost more than the standard visa fee.",
+        },
+      },
+      {
+        heading: "Choosing between a cheap agent and a good one",
+        body:
+          "For a straightforward tourist e-visa most people manage alone on the official portal, and an agent is buying you speed and someone to chase problems. For work permits, residence cards or anything involving an employer, that chasing is worth paying for. What separates agents is not the headline price but whether they have handled your nationality before and whether anyone answers when something goes wrong mid-application.",
+        quote: {
+          business: "VietnamVisaVOA.com",
+          person: "Gracie",
+          role: "Visa Consultant",
+          text: "Price is important, but so is reliability. We encourage customers to check what is actually included, whether the provider has experience with their nationality, and whether there is support available if any issue arises during the application process.",
+        },
+      },
+    ],
+    sources: [
+      ["Official Vietnam e-visa portal", "https://evisa.gov.vn/"],
+      ["Vietnam Government Portal work-permit guide", "https://vietnam.gov.vn/work-permits-68947"],
+      ["VisaInfo published agency fee table", "https://visainfo.vn/en/service-fees"],
+    ],
   },
 ];
