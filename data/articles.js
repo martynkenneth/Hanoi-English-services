@@ -278,4 +278,91 @@ const ARTICLES = [
       },
     ],
   },
+  {
+    slug: "where-to-live-in-hanoi",
+    category: "realestate",
+    title: "Where to Live in Hanoi: Choosing an Area and Renting Without Surprises",
+    intro:
+      "Every agent in Hanoi gets asked which district is best, and the honest answer is that it depends on your morning commute rather than on the area's reputation. Here is how to narrow it down, and what to check before you sign anything.",
+    asOf: "September 2026",
+    sections: [
+      {
+        heading: "Which area is right depends on your commute, not the guidebook",
+        body:
+          "The honest answer to the question every agent gets asked is that it depends on where you need to be each morning. There is no single best district, only the one that fits your workplace, your children's school and how much of your day you are willing to spend on a bike. As a rough signal of where English-speaking services actually cluster: of the 36 businesses in this directory, 14 are in Tay Ho and 5 in Hoan Kiem, with the rest spread across Ba Dinh, Hai Ba Trung, Dong Da and Yen Hoa.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "“Which area of Hanoi is best for me?” The answer depends on their workplace, children’s school, preferred lifestyle and daily commute.",
+        },
+      },
+      {
+        heading: "Take the traffic seriously",
+        body:
+          "This is the factor foreigners most consistently underestimate, because a distance that looks trivial on a map does not behave like one at eight in the morning. Before committing to a lease, ride the actual commute at the actual time you would be making it, in both directions. A place ten minutes further out can cost you an hour a day.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "Traffic in Hanoi is not always ideal, so commuting time to work or school should be an important consideration when choosing where to live.",
+        },
+      },
+      {
+        heading: "Decide what you want before you start looking",
+        body:
+          "Viewing property without clear criteria is how people spend three weeks seeing places and end up taking whichever one they saw last. Fixing your priorities first — and being honest about which are genuinely non-negotiable — turns a vague search into a short list.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "Not having clear requirements for the home they want to rent. Defining priorities such as location, budget, property type, size and move-in date helps make the search much faster and more effective.",
+        },
+      },
+      {
+        heading: "What to tell an agent up front",
+        body:
+          "The more precise you are at the start, the less of your time gets spent on properties that were never going to work. Mention the awkward requirements early rather than after a viewing — pets in particular narrow the field considerably in Hanoi, and there is no point discovering that at the end.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "They should share their preferred area, budget, move-in date, lease term and any specific requirements such as pets, furniture or view.",
+        },
+      },
+      {
+        heading: "Check what the rent actually includes",
+        body:
+          "Two apartments advertised at the same monthly figure can cost meaningfully different amounts to live in. Management fees, VAT, internet and utilities are sometimes bundled and sometimes not, and the difference can run to a significant share of the rent. Get the full monthly cost in writing before you sign, not the headline number.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "Location, property condition, size, view, furniture quality and lease term have the greatest impact on rent. Tenants should also confirm whether management fees, VAT, internet and utilities are included, as these can affect the final monthly cost.",
+        },
+      },
+      {
+        heading: "Good places go quickly",
+        body:
+          "This runs against the usual advice to take your time, and it is worth taking seriously. Hanoi has no shortage of listings, but the number that genuinely match a specific combination of area, budget and quality is much smaller than the volume suggests. If you have done the work of defining what you want, be ready to act when it appears.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "Although there are many rental listings in Hanoi, genuinely good homes that meet a client’s location, quality and budget requirements are more limited. When they find the right property, they should be prepared to make a decision quickly.",
+        },
+      },
+      {
+        heading: "Does using an agent cost you anything?",
+        body:
+          "Generally not. For a standard long-term rental in Hanoi the landlord pays the agent's commission, usually around one month's rent, and the tenant pays nothing. Worth remembering what that means, though: the agent is paid by the other side of the transaction, so their incentive is to close a deal rather than to find you the best available option. That is not a reason to avoid agents, but it is a reason to view through more than one and to read the lease yourself.",
+        quote: {
+          business: "Kensington Vietnam Real Estate",
+          person: "Harry Nguyen",
+          role: "Co-founder & Executive Director",
+          text: "We normally do not charge tenants a brokerage fee, so using our service does not usually make the rental more expensive. We help clients verify listings, arrange viewings, negotiate fair terms, review the lease and communicate with the landlord throughout the tenancy.",
+        },
+      },
+    ],
+  },
 ];
