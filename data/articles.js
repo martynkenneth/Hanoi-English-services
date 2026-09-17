@@ -35,7 +35,7 @@ const ARTICLES = [
     category: "auto",
     title: "Renting a Motorbike in Hanoi: What to Check Before You Pay",
     intro:
-      "A bike is how most foreigners get around Hanoi, and the rental itself is cheap. The costs that catch people out are the ones nobody mentions until something goes wrong — damage, punctures, deposits and licences.",
+      "A bike is how most foreigners get around Hanoi, and the rental itself is cheap. What catches people out are the things nobody mentions until something goes wrong — what the price excludes, which charges appear later, and what a shop will ask you to leave as a deposit.",
     asOf: "September 2026",
     sections: [
       {
@@ -83,9 +83,9 @@ const ARTICLES = [
         },
       },
       {
-        heading: "Do not leave your passport",
+        heading: "What to prepare before you rent",
         body:
-          "Some rental shops ask to hold your passport as security. You are not obliged to agree, and you should not: you may need it for a hotel, a bank, a clinic or a flight at no notice, and recovering it from a shop in a dispute is far harder than recovering a cash deposit. A photo of the information pages plus a cash deposit is normal practice at shops used to foreign customers, and a shop that will accept nothing less than the physical document is telling you how a disagreement would go.",
+          "Shops differ in what they ask for, so check before you arrive rather than turning up short. A cash deposit, evidence you can actually ride, and some form of identification is the usual baseline. The passport is where practice genuinely varies: plenty of reputable Hanoi operators accept one as a deposit and treat it as entirely normal, while others are satisfied with a photo of the information pages plus cash. You are not obliged to hand over the document itself, and it is worth a moment's thought before you do — you may need it for a hotel, a bank or a flight at short notice, and retrieving it during a disagreement is harder than retrieving cash. If a shop will only take the physical passport and you would rather it did not, ask whether a larger cash deposit would do instead. The point is to decide knowingly rather than by default.",
         quote: {
           business: "Just Cruizin' Hanoi",
           person: "To Hoai Lam",
