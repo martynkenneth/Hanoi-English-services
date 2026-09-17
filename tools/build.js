@@ -631,6 +631,18 @@ ${listingsHtml(items)}
 let articlesWritten = 0;
 const missingQuotes = [];
 
+// A stray double comma in the data file produces a sparse array. forEach and
+// filter silently skip the hole, so everything builds correctly and the fault
+// only shows up later as an off-by-one. Fail loudly instead.
+const articleHoles = [...ARTICLES.keys()].filter((i) => !(i in ARTICLES));
+if (articleHoles.length) {
+  console.error(
+    `\n✗ data/articles.js has ${articleHoles.length} empty slot(s) at index ` +
+      `${articleHoles.join(", ")} — almost certainly a double comma between entries.\n`
+  );
+  process.exit(1);
+}
+
 ARTICLES.forEach((a) => {
   const cat = CATEGORIES.find((c) => c.key === a.category);
   if (!cat) {

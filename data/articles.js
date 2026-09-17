@@ -73,7 +73,7 @@ const ARTICLES = [
       ["Offroad Vietnam published rental prices", "https://offroadvietnam.com/prices"],
       ["James Motorbikes rental policy", "https://jamesmotorbikes.com/policy/"],
     ],
-  },,
+  },
   {
     slug: "how-long-does-a-vietnam-visa-take",
     category: "visa",
