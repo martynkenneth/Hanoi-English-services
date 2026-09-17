@@ -1,0 +1,26 @@
+# Checks every website and referral link in the directory once a week, and
+# emails you when one breaks. A listed business had to tell us their own link
+# was dead — most people would just leave instead.
+#
+# Deliberately separate from the listings workflow: a link dying at a third
+# party is not a reason to fail an edit you just made to the data file.
+name: Check links
+
+on:
+  schedule:
+    # Mondays at 02:00 UTC, which is Monday morning in Hanoi.
+    - cron: "0 2 * * 1"
+  workflow_dispatch:
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Check every listing link resolves
+        run: node tools/check-links.js

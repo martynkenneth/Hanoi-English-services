@@ -366,7 +366,7 @@ const LISTINGS = [
     description: "Hanoi visa service with English support via WhatsApp, Zalo and email.",
     address: "35 Luong Dinh Cua, Dong Da District, Hanoi",
     phone: "+84 969 255 515",
-    website: "https://vietnamvisavoa.com/en/",
+    website: "https://vietnamvisavoa.com/",
     englishLevel: "Fluent",
     tier: "free",
     dateAdded: "2026-08-13",
