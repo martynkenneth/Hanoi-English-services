@@ -44,6 +44,18 @@ if (fs.existsSync(guidesPath)) {
   GUIDES = gs.__g__ || [];
 }
 
+let ARTICLES = [];
+const articlesPath = path.join(ROOT, "data", "articles.js");
+if (fs.existsSync(articlesPath)) {
+  const as = {};
+  vm.runInNewContext(
+    fs.readFileSync(articlesPath, "utf8") + ";globalThis.__a__ = ARTICLES;",
+    as,
+    { filename: "data/articles.js" }
+  );
+  ARTICLES = as.__a__ || [];
+}
+
 /*
   A short, specific introduction per category. These are deliberately about
   what to check before you book, not padding — a page of restated listings
@@ -232,6 +244,20 @@ function otherCategoryLinks(currentKey) {
 // A listing page answers "who"; the guide answers "how much" and "any good".
 // Someone who lands on one usually wants the other, and the link passes
 // authority between two pages targeting the same subject.
+function articleLinksFor(cat) {
+  const list = ARTICLES.filter((a) => a.category === cat.key);
+  if (!list.length) return "";
+  return `  <section class="category-section">
+    <h2 class="category-title">Reading</h2>
+    <nav class="cat-links">
+${list
+  .map((a) => `      <a href="${SITE}/articles/${a.slug}/">${esc(a.title)}</a>`)
+  .join("\n")}
+    </nav>
+  </section>
+`;
+}
+
 function guideLinkFor(cat) {
   const guide = GUIDES.find(
     (g) => g.category === cat.key && (g.questions || []).some((q) => q.a && q.a.trim())
@@ -305,7 +331,7 @@ ${jsonLd(cat, items)}
 ${listingsHtml(items)}
   </section>
 
-${guideLinkFor(cat)}
+${guideLinkFor(cat)}${articleLinksFor(cat)}
   <section class="category-section">
     <h2 class="category-title">Other services in Hanoi</h2>
     <nav class="cat-links">
@@ -484,6 +510,145 @@ ${listingsHtml(items)}
 `;
 }
 
+// --- Article pages ------------------------------------------------------
+function articlePage(a, cat, items) {
+  const url = `${SITE}/articles/${a.slug}/`;
+  const quoted = a.sections.filter((x) => x.quote && x.quote.text && x.quote.business);
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: a.title,
+    description: a.intro,
+    mainEntityOfPage: url,
+    publisher: { "@type": "Organization", name: "Hanoi Expat Directory", url: SITE },
+    about: { "@type": "Thing", name: `${cat.label} in Hanoi` },
+    // Naming who was quoted is the point of these pages: it is what a
+    // competitor cannot copy and what a reader can check.
+    citation: quoted.map((x) => x.quote.business),
+  };
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${esc(a.title)}</title>
+<meta name="description" content="${esc(a.intro)}">
+<link rel="canonical" href="${url}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 30 20%22><rect width=%2230%22 height=%2220%22 fill=%22%23da251d%22/><polygon fill=%22%23ffff00%22 points=%2215,4 16.57,8.84 21.66,8.84 17.54,11.83 19.11,16.66 15,13.67 10.89,16.66 12.46,11.83 8.34,8.84 13.43,8.84%22/></svg>">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Hanoi Expat Directory">
+<meta property="og:title" content="${esc(a.title)}">
+<meta property="og:description" content="${esc(a.intro)}">
+<meta property="og:url" content="${url}">
+<meta property="og:image" content="${SITE}/img/social-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="${SITE}/css/style.css">
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "5dff00a34d7e47459a37916dae3bd27f"}'></script>
+<script type="application/ld+json">
+${JSON.stringify(ld, null, 2)}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="${SITE}/" class="logo">
+      <svg class="logo-flag" viewBox="0 0 30 20" role="img" aria-label="Vietnam">
+        <rect width="30" height="20" fill="#da251d"/>
+        <polygon fill="#ffff00" points="15,4 16.57,8.84 21.66,8.84 17.54,11.83 19.11,16.66 15,13.67 10.89,16.66 12.46,11.83 8.34,8.84 13.43,8.84"/>
+      </svg>
+      Hanoi <span>Expat Directory</span>
+    </a>
+    <nav class="header-nav">
+      <a href="${SITE}/">All categories</a>
+      <a href="${SITE}/#get-listed">List Your Business</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>${esc(a.title)}</h1>
+    <p>${esc(a.intro)}</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <article class="guide">
+${a.asOf ? `    <p class="checked">Written ${esc(a.asOf)}. Prices and rules change — check with the business before committing.</p>\n` : ""}${a.sections
+    .map(
+      (x) => `    <section class="qa">
+      <h2>${esc(x.heading)}</h2>
+      <p>${esc(x.body)}</p>${
+        x.quote && x.quote.text && x.quote.business
+          ? `\n      <blockquote class="biz-quote">
+        <p>${esc(x.quote.text)}</p>
+        <cite>${esc(x.quote.business)}</cite>
+      </blockquote>`
+          : ""
+      }
+    </section>`
+    )
+    .join("\n")}
+${
+  (a.sources || []).length
+    ? `    <section class="sources">
+      <h2>Sources</h2>
+      <ul>
+${a.sources
+  .map(([n, h]) => `        <li><a href="${esc(h)}" target="_blank" rel="noopener nofollow">${esc(n)}</a></li>`)
+  .join("\n")}
+      </ul>
+    </section>\n`
+    : ""
+}  </article>
+
+  <section class="category-section">
+    <h2 class="category-title">${cat.icon} ${esc(cat.label)} in Hanoi</h2>
+    <p class="guide-lede">${confirmedSuffix(items)}</p>
+${listingsHtml(items)}
+    <p class="guide-lede"><a href="${SITE}/${cat.key}/">See the full ${esc(cat.label.toLowerCase())} listing →</a></p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Made by expats living in Hanoi. Something out of date? <a href="mailto:martynsessford@gmail.com">Let us know</a>.</p>
+    <p class="fine-print">Listings are confirmed by phone before being marked verified. Details change — please check with the business before visiting.</p>
+  </div>
+</footer>
+
+</body>
+</html>
+`;
+}
+
+let articlesWritten = 0;
+const missingQuotes = [];
+
+ARTICLES.forEach((a) => {
+  const cat = CATEGORIES.find((c) => c.key === a.category);
+  if (!cat) {
+    console.error(`✗ article "${a.slug}" points at unknown category "${a.category}".`);
+    process.exitCode = 1;
+    return;
+  }
+  (a.sections || []).forEach((x) => {
+    if (!x.quote || !x.quote.text) missingQuotes.push(`${a.slug}: "${x.heading}"`);
+  });
+  const items = LISTINGS.filter((l) => l.category === cat.key).sort(
+    (x, y) => (TIER_ORDER[x.tier] ?? 2) - (TIER_ORDER[y.tier] ?? 2)
+  );
+  const dir = path.join(ROOT, "articles", a.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), articlePage(a, cat, items));
+  urls.push(`${SITE}/articles/${a.slug}/`);
+  articlesWritten++;
+});
+
 let guidesWritten = 0;
 const skippedQuestions = [];
 
@@ -592,7 +757,19 @@ Sitemap: ${SITE}/sitemap.xml
 `
 );
 
-console.log(`\n✓ Built ${written} category pages and ${guidesWritten} guide pages.`);
+console.log(
+  `\n✓ Built ${written} category pages, ${guidesWritten} guides and ${articlesWritten} articles.`
+);
+if (missingQuotes.length) {
+  console.log(
+    `\n○ ${missingQuotes.length} article section(s) still waiting on an interview quote:`
+  );
+  missingQuotes.forEach((q) => console.log("    - " + q));
+  console.log(
+    "\n  Sections publish fine without one. Paste answers into data/articles.js\n" +
+      "  as interviews come back — never write a quote yourself.\n"
+  );
+}
 console.log(`  sitemap.xml and robots.txt written — ${urls.length} URLs total.`);
 
 if (skippedQuestions.length) {

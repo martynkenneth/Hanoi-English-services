@@ -644,3 +644,25 @@ html { scroll-behavior: smooth; }
   opacity: 0.8;
   font-style: italic;
 }
+
+/* Interview quotes inside articles — the part competitors can't copy, so
+   they should look like the centrepiece rather than a footnote. */
+.biz-quote {
+  margin: 16px 0 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--red);
+  background: #fffaf9;
+  border-radius: 0 10px 10px 0;
+}
+.biz-quote p {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  color: var(--ink);
+  font-style: italic;
+}
+.biz-quote cite {
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
