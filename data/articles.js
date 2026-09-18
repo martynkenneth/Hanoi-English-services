@@ -365,4 +365,83 @@ const ARTICLES = [
       },
     ],
   },
+  {
+    slug: "choosing-a-dentist-in-hanoi",
+    category: "dentists",
+    title: "Choosing a Dentist in Hanoi: What to Ask Before Treatment",
+    intro:
+      "Dental work is one of the things foreigners in Hanoi most often pay for out of pocket, and the price range for what sounds like the same problem is enormous. Knowing which questions to ask is worth more than any price list.",
+    asOf: "September 2026",
+    sections: [
+      {
+        heading: "Why nobody can quote you a price from a photo",
+        body:
+          "This is the question every Hanoi clinic fields first, and the honest answer frustrates people: it cannot be answered until someone has looked. The gap is not small either. Using the ranges in our dental price guide, a simple filling runs 260,000–650,000₫, while the same broken tooth needing root canal treatment and a crown is closer to 7,000,000₫. That is a tenfold difference decided by something only an examination and often an X-ray can establish. Treat any firm price quoted over a message, before anyone has seen the tooth, as a number that may well change.",
+        quote: {
+          business: "Dental 365",
+          person: "Dr. Thy Nga Nguyen",
+          role: "Main Dentist",
+          text: "Usually it is the condition of the tooth and how complicated the treatment turns out to be. Two people can both say they have a “broken tooth,” but one might only need a filling while the other needs a root canal and crown. So it is difficult to judge from a photo or message alone. We always try to explain the options and costs before doing anything.",
+        },
+      },
+      {
+        heading: "Do not wait until it hurts",
+        body:
+          "Pain is a late signal in dentistry, not an early one. By the time a problem announces itself, the cheap version of the fix has often passed, which is how a filling becomes a root canal. Living abroad makes this worse: it is easy to defer something small until a trip home that keeps getting postponed.",
+        quote: {
+          business: "Dental 365",
+          person: "Dr. Thy Nga Nguyen",
+          role: "Main Dentist",
+          text: "Waiting until something hurts. We see a few patients who have known about a small problem for a while but put it off. Usually the earlier we catch something, the easier it is to deal with.",
+        },
+      },
+      {
+        heading: "What to bring to a first appointment",
+        body:
+          "Very little, which is worth knowing if the admin is what has been putting you off. The two things genuinely worth digging out are any records from a previous dentist and an honest account of your medical history, because both change what a dentist will recommend.",
+        quote: {
+          business: "Dental 365",
+          person: "Dr. Thy Nga Nguyen",
+          role: "Main Dentist",
+          text: "Nothing. If you have old X-rays or records from your previous dentist, bring them along. And let us know if you are taking any medication or have any medical conditions we should know about. Otherwise, just come in.",
+        },
+      },
+      {
+        heading: "Comparing a cheap quote with an expensive one",
+        body:
+          "Price lists are the easiest thing to compare across clinics and the least informative, because two clinics quoting for a crown may not be quoting for the same crown. Materials vary, who performs the treatment varies, and what happens if something fails afterwards varies most of all. Ask those three questions of both clinics and the comparison becomes meaningful.",
+        quote: {
+          business: "Dental 365",
+          person: "Dr. Thy Nga Nguyen",
+          role: "Main Dentist",
+          text: "I would ask them not to compare only the number on the price list. Ask what treatment you actually need, what materials are being used, who is doing the treatment, what happens if there is a problem afterwards, and whether you feel comfortable with the dentist. Cheap treatment is not necessarily bad, and expensive treatment is not automatically good. You need to understand what you are paying for.",
+        },
+      },
+      {
+        heading: "You are allowed to ask questions",
+        body:
+          "Worth stating plainly, because a language barrier and an unfamiliar system make people more reluctant to interrupt than they would be at home — and dentistry is one of the worst places to nod along to something you have not understood. A clinic that treats foreign patients regularly expects to be asked.",
+        quote: {
+          business: "Dental 365",
+          person: "Dr. Thy Nga Nguyen",
+          role: "Main Dentist",
+          text: "That they can ask as many questions as they want. If you do not understand why we are recommending something, ask us. If you want to know if there is another option, ask us. If you are nervous, tell us. Especially when you are having dental treatment in another country, you should feel comfortable with the plan before you start.",
+        },
+      },
+      {
+        heading: "Do not choose purely on how close it is",
+        body:
+          "Convenience is the reason most people give for the dentist they ended up with, and it is a poor one for anything beyond a check-up. The things that matter — whether treatment is explained clearly, whether you feel rushed into deciding — cost you nothing to assess on a first visit, and a twenty-minute journey is not much against work you may live with for years.",
+        quote: {
+          business: "Dental 365",
+          person: "Dr. Thy Nga Nguyen",
+          role: "Main Dentist",
+          text: "Do not choose a dentist only because they are close to your apartment. Find somewhere you feel comfortable, where things are explained clearly and you do not feel rushed into making a decision. And regular check-ups really are easier than emergency appointments.",
+        },
+      },
+    ],
+    sources: [
+      ["Hanoi dental cost benchmark", "https://www.dentavacation.com/dental-work-hanoi-vietnam/"],
+    ],
+  },
 ];
