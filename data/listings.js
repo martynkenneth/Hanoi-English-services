@@ -71,6 +71,20 @@ const LISTINGS = [
      going blank, and GitHub emails you within a minute of pushing.
      ------------------------------------------------------------------ */
   {
+    id: "hanoi-dental-365",
+    name: "Dental 365",
+    category: "dentists",
+    description: "Dental clinic in Cau Giay, English-speaking, with a dedicated international line.",
+    address: "16 Nguyen Thi Dinh, Trung Hoa, Cau Giay, Hanoi",
+    phone: "+84 886 106 360",
+    website: "https://dental365.vn",
+    englishLevel: "Fluent",
+    tier: "free",
+    dateAdded: "2026-09-19",
+    unverified: true,
+    verify: "https://www.google.com/maps/search/?api=1&query=Dental+365+Nguyen+Thi+Dinh+Trung+Hoa+Cau+Giay+Hanoi"
+  },
+  {
     id: "hanoi-sage-wellness",
     name: "SAGE Wellness",
     category: "fitness",
