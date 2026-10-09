@@ -1,0 +1,146 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Check Verify Ask motion</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--ink:#16243a;--muted:#52627a;--check:#0b7f73;--verify:#3558c8;--ask:#c97a00;--on-accent:#fff;
+--wall:#dfe8ef;--floor:#c6d3de;--panel:#fff;--panel-line:#b3c2d1;--soft:#eaf0f5;--skin:#e8b690;--hair:#2b2f3a;
+--shirt-a:#3558c8;--shirt-b:#0b7f73;--shirt-c:#c97a00;--display:"Bricolage Grotesque","Trebuchet MS",sans-serif;--body:"Source Sans 3","Segoe UI",sans-serif}
+*{box-sizing:border-box}html,body{margin:0;background:#dfe8ef}
+#v{position:relative;width:1280px;height:720px;overflow:hidden}
+#v svg{position:absolute;inset:0;width:1280px;height:720px;display:block}
+#sub{position:absolute;left:0;right:0;bottom:0;height:84px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 60px;font:600 29px/1.2 var(--body)}
+#tag{position:absolute;left:28px;top:24px;font:800 30px var(--display);letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:6px 22px;border-radius:40px;opacity:0}
+.wall{fill:var(--wall)}.floor{fill:var(--floor)}.panel{fill:var(--panel)}.pline{stroke:var(--panel-line);stroke-width:1.5;fill:none}
+.soft{fill:var(--soft)}.skin{fill:var(--skin)}.hair{fill:var(--hair)}.sa{fill:var(--shirt-a)}.sb{fill:var(--shirt-b)}.sc{fill:var(--shirt-c)}
+.fc{fill:var(--check)}.fv{fill:var(--verify)}.fa{fill:var(--ask)}.fi{fill:var(--ink)}.fm{fill:var(--muted)}
+.sk{stroke:var(--check)}.sv{stroke:var(--verify)}.sq{stroke:var(--ask)}.si{stroke:var(--ink)}.sw{stroke:var(--on-accent)}
+.ln{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tx{font-family:var(--display);font-weight:800;fill:var(--ink)}.tb{font-family:var(--body);font-weight:600;fill:var(--ink)}.tw{fill:var(--on-accent)}
+/* animation primitives; delay via --d, length via --l */
+.an{animation-delay:var(--d,0s);animation-duration:var(--l,.5s);animation-fill-mode:both;animation-timing-function:cubic-bezier(.2,.9,.3,1.15);transform-box:fill-box;transform-origin:center}
+.pop{animation-name:pop}.fade{animation-name:fade;animation-timing-function:ease-out}.up{animation-name:up}.right{animation-name:right}
+.grow{animation-name:grow;transform-origin:50% 100%}.draw{animation-name:draw;animation-timing-function:ease-in-out;stroke-dasharray:1}
+.thump{animation-name:thump}.slide{animation-name:slide}.zoom{animation-name:zoom;transform-box:view-box}
+.bob{animation:bob 2.4s ease-in-out infinite alternate}.wob{animation:wob .9s ease-in-out infinite alternate}
+.push{animation:push var(--l) linear both;transform-box:view-box;transform-origin:160px 90px}
+.sc-in{animation:scin .35s ease-out both}
+@keyframes pop{from{opacity:0;transform:scale(.35)}to{opacity:1;transform:scale(1)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes right{from{opacity:0;transform:translateX(90px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes thump{0%{opacity:0;transform:scale(3)}60%{opacity:1;transform:scale(.92)}100%{opacity:1;transform:scale(1)}}
+@keyframes slide{from{transform:translateX(-70px)}to{transform:none}}
+@keyframes zoom{from{opacity:0;transform:scale(.05)}to{opacity:1;transform:scale(1)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-2.5px)}}
+@keyframes wob{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes push{from{transform:scale(1)}to{transform:scale(1.045)}}
+@keyframes scin{from{opacity:0}to{opacity:1}}
+</style>
+<div id="v"><svg id="svg" viewBox="-20 0 360 202.5" xmlns="http://www.w3.org/2000/svg"></svg><div id="tag"></div><div id="sub"></div></div>
+<script>
+const A=(c,cls,d,l)=>`<g class="an ${cls}" style="--d:${d}s${l?`;--l:${l}s`:''}">${c}</g>`;
+const bg=(f=140)=>`<rect class="wall" x="-20" width="360" height="203"/><rect class="floor" x="-20" y="${f}" width="360" height="${203-f}"/>`;
+const person=(x,y,s,sh)=>`<g transform="translate(${x} ${y}) scale(${s})"><g class="bob"><rect x="-15" y="17" width="30" height="36" rx="13" class="${sh}"/><circle cx="0" cy="5" r="11" class="skin"/><path d="M-11.5 4.5A11.5 11.5 0 0 1 11.5 4.5Q0 -1 -11.5 4.5Z" class="hair"/></g></g>`;
+const school=(x,y,s,c)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-14 0L0 -11L14 0Z" class="${c}"/><rect x="-11" width="22" height="14" class="${c}"/><rect x="-3" y="5" width="6" height="9" class="panel"/><rect x="-1" y="-20" width="2" height="10" class="fi"/><path d="M1 -20L9 -17L1 -14Z" class="fa"/></g>`;
+const tick=(x,y,s,c,d,w=3)=>`<g transform="translate(${x} ${y}) scale(${s})"><path pathLength="1" class="an draw ln ${c}" style="--d:${d}s;--l:.4s" stroke-width="${w}" d="M-6 0L-2 4.5L7 -5"/></g>`;
+const lensG=(x,y,r,c)=>`<circle cx="${x}" cy="${y}" r="${r}" class="ln ${c}" stroke-width="3.5"/><path d="M${x+r*.72} ${y+r*.72}L${x+r*1.5} ${y+r*1.5}" class="ln ${c}" stroke-width="5"/>`;
+const bubble=(x,y,w,h,lines,tail,d)=>A(`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" class="panel"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" class="pline"/><path d="${tail}" class="panel"/>${lines.map((t,i)=>`<text x="${x+w/2}" y="${y+15+i*12}" text-anchor="middle" font-size="9.5" class="tb">${t}</text>`).join('')}`,'pop',d);
+const bars=(x,y,n,c,d)=>Array.from({length:n},(_,i)=>A(`<rect x="${x+i*9}" y="${y-6-i*5}" width="6" height="${6+i*5}" rx="1" class="${c}"/>`,'grow',d+i*.18,.45)).join('');
+const shield=(cx,cy,s,c)=>`<path transform="translate(${cx} ${cy}) scale(${s})" d="M0 -52L45 -38V0C45 30 24 50 0 60C-24 50 -45 30 -45 0V-38Z" class="${c}"/>`;
+const win=(x,y,w,h,url)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" class="panel"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" class="pline"/><path d="M${x} ${y+15}H${x+w}" class="pline"/><circle cx="${x+9}" cy="${y+7.5}" r="2.3" class="fa"/><circle cx="${x+17}" cy="${y+7.5}" r="2.3" class="fc"/><circle cx="${x+25}" cy="${y+7.5}" r="2.3" class="fv"/><rect x="${x+36}" y="${y+3.5}" width="${w-46}" height="8" rx="4" class="soft"/>${url?`<text x="${x+41}" y="${y+10}" font-size="6" class="tb fm">${url}</text>`:''}`;
+
+const S=[ // each returns scene markup; local time in seconds
+()=>`${bg(138)}
+ <rect x="168" y="118" width="140" height="8" rx="2" class="fi"/><rect x="182" y="126" width="6" height="30" class="fi"/><rect x="288" y="126" width="6" height="30" class="fi"/>
+ <rect x="198" y="64" width="84" height="52" rx="4" class="fi"/><rect x="202" y="68" width="76" height="44" rx="2" class="panel"/>
+ ${A(school(222,94,.9,'fv')+school(240,96,.75,'fc')+school(258,94,.9,'fa'),'fade',.6,.8)}
+ ${person(120,78,1.7,'sa')}
+ ${A(`<circle cx="150" cy="58" r="3" class="panel"/><circle cx="160" cy="48" r="4.5" class="panel"/>`,'pop',.5)}
+ ${A(`<ellipse cx="108" cy="30" rx="64" ry="22" class="panel"/><ellipse cx="108" cy="30" rx="64" ry="22" class="pline"/>`,'pop',.7,.6)}
+ ${A(school(78,38,.8,'fv'),'pop',1.2)}${A(school(108,38,.8,'fc'),'pop',1.6)}${A(school(138,38,.8,'fa'),'pop',2.0)}`,
+()=>`${bg(150)}${[['Check','fc',18,.1],['Verify','fv',118,1.15],['Ask','fa',218,2.05]].map(([w,c,x,d],i)=>A(`
+ <rect x="${x}" y="34" width="84" height="112" rx="12" class="panel"/><rect x="${x}" y="34" width="84" height="112" rx="12" class="pline"/>
+ <circle cx="${x+42}" cy="76" r="25" class="${c}"/>
+ ${i==0?tick(x+42,76,1.6,'sw',d+.3):''}
+ ${i==1?A(`<g stroke="var(--on-accent)"><circle cx="${x+39}" cy="73" r="9" class="ln" stroke-width="3"/><path d="M${x+46} 80L${x+53} 87" class="ln" stroke-width="4"/></g>`,'pop',d+.25):''}
+ ${i==2?A(`<text x="${x+42}" y="88" text-anchor="middle" font-size="34" class="tx tw">?</text>`,'pop',d+.25):''}
+ <text x="${x+42}" y="125" text-anchor="middle" font-size="19" class="tx">${w}.</text>`,'pop',d,.45)).join('')}`,
+()=>`${bg(160)}
+ ${A(win(36,12,248,150,'ourschool.example')+`<rect x="46" y="34" width="228" height="48" rx="4" class="soft"/>${school(160,66,1.4,'fv')}<text x="160" y="94" text-anchor="middle" font-size="9" class="tb">Welcome to Example International School</text>`,'up',0,.6)}
+ ${[90,160,230].map((x,i)=>A(`<circle cx="${x}" cy="124" r="18" class="${['fa','fc','fv'][i]}"/><circle cx="${x}" cy="124" r="13" fill="none" stroke="var(--on-accent)" stroke-width="1.2"/>${tick(x,125,.85,'sw',.9+i*.2,3)}<rect x="${x-18}" y="146" width="36" height="4" rx="2" class="soft"/>`,'pop',.7+i*.2)).join('')}
+ ${A(A(lensG(160,124,25,'sk'),'fade',0),'slide',1.2,.9)}
+ ${A(`<rect x="210" y="22" width="60" height="16" rx="8" class="fc"/><text x="240" y="33" text-anchor="middle" font-size="8" class="tb tw">“Accredited!”</text>`,'pop',2.2)}`,
+()=>`${bg(160)}
+ <g opacity=".8">${win(10,36,118,108,'ourschool.example')}<rect x="20" y="58" width="98" height="30" rx="3" class="soft"/>${school(69,80,.8,'fv')}<circle cx="69" cy="112" r="14" class="fa"/>${tick(69,113,.65,'sw',0,3)}</g>
+ ${A(`<rect x="14" y="150" width="104" height="14" rx="7" class="fv"/><text x="66" y="160" text-anchor="middle" font-size="7.5" class="tb tw">School’s own claim</text>`,'fade',.2)}
+ <path pathLength="1" class="an draw ln sv" style="--d:.7s;--l:.9s" stroke-width="2.5" d="M86 112C130 112 140 70 188 70"/>
+ ${A(`<path d="M184 64L196 70L184 76Z" class="fv"/>`,'pop',1.5,.2)}
+ ${A(win(192,20,120,140,'accreditor.example/directory')+`<rect x="202" y="42" width="100" height="14" rx="7" class="soft"/>${lensG(212,49,4,'si')}`,'right',.9,.7)}
+ ${[0,1,2,3].map(i=>A(`<rect x="202" y="${64+i*22}" width="100" height="18" rx="3" class="${i==1?'soft':'panel'}"/><rect x="202" y="${64+i*22}" width="100" height="18" rx="3" class="pline"/><rect x="208" y="${71+i*22}" width="44" height="4" rx="2" class="fm" opacity=".5"/>`,'up',1.5+i*.15,.4)).join('')}
+ ${A(`<circle cx="288" cy="95" r="7" class="fc"/>`,'pop',2.6)}${tick(288,95.5,.5,'sw',2.75,3)}
+ ${A(`<rect x="196" y="164" width="112" height="13" rx="6.5" class="fc" transform="translate(0 -7)"/><text x="252" y="166.5" text-anchor="middle" font-size="7.5" class="tb tw">Independent source</text>`,'up',2.0)}`,
+()=>`${bg(142)}${person(76,62,1.7,'sa')}${person(244,62,1.7,'sb')}
+ ${bubble(10,8,146,40,['How have your evaluation','findings improved things','for students?'],'M60 48L72 48L70 58Z',.4)}
+ ${bubble(170,20,140,28,['Here is what changed','in our classrooms.'],'M240 48L252 48L246 56Z',2.4)}
+ ${A(`<rect x="132" y="92" width="56" height="62" rx="4" class="panel"/><rect x="132" y="92" width="56" height="62" rx="4" class="pline"/><rect x="139" y="99" width="30" height="4" rx="2" class="fm" opacity=".5"/>`,'pop',3.3)}
+ ${bars(142,140,5,'fc',3.8)}
+ <path pathLength="1" class="an draw ln sk" style="--d:4.9s;--l:.5s" stroke-width="2.5" d="M172 124V108M166 114L172 107L178 114"/>
+ ${[0,1,2,3].map(i=>A(`<g transform="translate(${96+i*42} 154) scale(.55)"><circle r="9" class="skin"/><path d="M-9 -1A9 9 0 0 1 9 -1Z" class="hair"/></g>`,'up',4.6+i*.2)).join('')}`,
+()=>`${bg(150)}
+ ${A(`<rect x="34" y="12" width="252" height="118" rx="8" class="fi"/><rect x="40" y="18" width="240" height="106" rx="4" class="panel"/><path d="M14 134H306L296 144H24Z" class="fi" opacity=".85"/>`,'up',.1,.7)}
+ ${A(`<text x="50" y="32" font-size="9" class="tx">World School Index</text>`,'fade',.8)}
+ ${[48,124,200].map((x,i)=>A(`<rect x="${x}" y="40" width="72" height="76" rx="5" class="soft"/>${school(x+36,62,.9,['fv','fc','fa'][i])}<rect x="${x+8}" y="78" width="56" height="4" rx="2" class="fm" opacity=".5"/><rect x="${x+8}" y="86" width="38" height="4" rx="2" class="fm" opacity=".35"/>`,'pop',1.5+i*1.1)+bars(x+10,110,4,['fv','fc','fa'][i],2+i*1.1)).join('')}
+ ${A(`<circle cx="268" cy="116" r="24" class="fc"/><circle cx="268" cy="116" r="24" fill="none" stroke="var(--panel)" stroke-width="2.5"/>`,'thump',6.0,.5)}${tick(268,117,1.5,'sw',6.4)}
+ ${A(`<rect x="30" y="148" width="260" height="19" rx="9.5" class="fc"/><text x="160" y="161" text-anchor="middle" font-size="9.5" class="tb tw">Always confirm with the accrediting organisation</text>`,'up',7.0,.6)}`,
+()=>`${bg(150)}
+ ${bubble(52,10,216,30,['“Is this school accredited?”'],'M150 40L166 40L160 50Z',.3)}
+ ${A(shield(160,104,1.05,'fv')+`<path transform="translate(160 104) scale(1.05)" d="M0 -44L36 -33V0C36 24 19 40 0 48C-19 40 -36 24 -36 0V-33Z" fill="none" stroke="var(--on-accent)" stroke-width="1.5"/>`,'pop',.8,.6)}
+ <g transform="translate(160 104)"><g class="an wob" style="--d:1.6s"><text x="0" y="20" text-anchor="middle" font-size="62" class="tx tw">?</text></g></g>
+ ${A(school(70,128,1.2,'fm'),'fade',1.4)}${A(school(250,128,1.2,'fm'),'fade',1.6)}`,
+()=>`${bg(150)}
+ ${A(shield(58,98,.8,'fc'),'pop',.3,.5)}${tick(58,100,2.2,'sw',.8)}
+ ${A(`<text x="58" y="162" text-anchor="middle" font-size="9" class="tb">Accredited</text>`,'fade',.9)}
+ <path pathLength="1" class="an draw ln sv" style="--d:1.8s;--l:.6s" stroke-width="2.5" d="M98 98H126"/>${A(`<path d="M122 92L134 98L122 104Z" class="fv"/>`,'pop',2.3,.2)}
+ <defs><clipPath id="lc"><circle cx="228" cy="86" r="66"/></clipPath></defs>
+ <g style="transform-origin:228px 86px;transform-box:view-box" class="an zoom" ><g style="--d:0s"></g></g>
+ ${A(`<g clip-path="url(#lc)"><rect x="150" y="10" width="160" height="150" class="wall"/><rect x="150" y="118" width="160" height="50" class="floor"/>
+  <rect x="170" y="28" width="100" height="44" rx="3" class="fi"/><rect x="174" y="32" width="92" height="36" rx="2" fill="var(--check)" opacity=".85"/>
+  <path pathLength="1" class="an draw ln sw" style="--d:4.3s;--l:.8s" stroke-width="2" d="M182 46H220"/><path pathLength="1" class="an draw ln sw" style="--d:5s;--l:.8s" stroke-width="2" d="M182 56H240"/>
+  ${person(204,70,1.15,'sc')}<rect x="226" y="110" width="52" height="5" rx="2" class="fi"/><rect x="232" y="115" width="4" height="22" class="fi"/><rect x="268" y="115" width="4" height="22" class="fi"/>
+  ${person(252,84,1.05,'sa')}<rect x="240" y="104" width="22" height="6" rx="1" class="fa"/></g>
+  <circle cx="228" cy="86" r="66" class="ln sk" stroke-width="5"/><path d="M276 134L304 164" class="ln sk" stroke-width="8"/>`,'zoom',2.6,.9).replace('<g class="an zoom"','<g class="an zoom" style="transform-origin:228px 86px;--d:2.6s;--l:.9s"')}`
+];
+const VO=[
+ 'When comparing international schools, remember three words:',
+ 'Check. Verify. Ask.',
+ 'Check what the school claims.',
+ 'Verify its accreditation status independently.',
+ 'And ask how its evaluation findings have improved the experience of students.',
+ 'World School Index can help you research and compare international schools, but accreditation claims should always be confirmed with the relevant organisation.',
+ 'Because the question isn’t simply: “Is this school accredited?”',
+ 'It’s: “What does that accreditation tell me about the education my child will receive?”'];
+const DUR=[4,3,3,4,6,10,4,7]; // seconds
+const TAG=[null,null,['Check','--check'],['Verify','--verify'],['Ask','--ask',1],null,null,null];
+const START=DUR.reduce((a,d,i)=>(a.push((a[i]||0)+d),a),[0]); // cumulative; START[i] = start of scene i
+const TOTAL=START[DUR.length];
+let shown=-1;
+window.TOTAL=TOTAL;
+window.setTime=function(t){
+ let i=DUR.length-1; for(let k=0;k<DUR.length;k++){ if(t<START[k+1]){i=k;break;} }
+ const lt=t-START[i];
+ if(i!==shown){
+  shown=i;
+  document.getElementById('svg').innerHTML=`<g class="push" style="--l:${DUR[i]}s"><g class="sc-in">${S[i]()}</g></g>`;
+  const tg=document.getElementById('tag'), T=TAG[i];
+  tg.style.background=T?`var(${T[1]})`:'transparent'; tg.textContent=T?T[0]:''; tg.dataset.on=T?1:0; tg.style.left=(T&&T[2])?'auto':'28px'; tg.style.right=(T&&T[2])?'28px':'auto'; tg.style.top=(T&&T[2])?'auto':'24px'; tg.style.bottom=(T&&T[2])?'104px':'auto';
+  document.getElementById('sub').textContent=VO[i];
+ }
+ document.getElementById('svg').getAnimations({subtree:true}).forEach(a=>{a.pause();a.currentTime=lt*1000;});
+ const tg=document.getElementById('tag'); tg.style.opacity=tg.dataset.on==1?Math.min(1,lt/.3):0;
+ document.getElementById('sub').style.opacity=Math.min(1,lt/.25);
+};
+setTime(0);
+</script>
