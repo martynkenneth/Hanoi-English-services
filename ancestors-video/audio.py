@@ -1,6 +1,6 @@
 # Synthesises the soundtrack: dark ambient pad + one bell per generation + web-phase swell. numpy only.
 import numpy as np, wave, sys
-SR=44100; S=1.7/1.05; DUR=26.667*S; N=int(SR*DUR); rng=np.random.default_rng(5)
+SR=44100; S=1.7/1.05; SH=1.5; DUR=(25.2-SH)*S; N=int(SR*DUR); rng=np.random.default_rng(5)
 t=np.arange(N)/SR
 L=np.zeros(N); Rr=np.zeros(N)
 sm=lambda x:(lambda c:c*c*(3-2*c))(np.clip(x,0,1))
@@ -34,7 +34,7 @@ pad([A*3,A*4*1.1892/1.0],0,DUR,.045,4.0)       # C/E colour (A minor)
 pad([A*3*1.5,A*5],4*S,16*S,.035,4.0)               # fifth opens up
 pad([A*6,A*7.5,A*9],12.5*S,DUR,.03,4.0)          # shimmer for the reveal
 # sub swell and fade of the old tree at 14-17
-sub=np.sin(2*np.pi*36*t)*sm((t-13*S)/(3*S))*(1-sm((t-17*S)/(3*S)))*.12; L+=sub; Rr+=sub
+sub=np.sin(2*np.pi*36*t)*sm((t-13*S)/(3*S))*(1-sm((t-(16-SH)*S)/(2.5*S)))*.12; L+=sub; Rr+=sub
 # --- one bell per generation
 pent=[0,3,5,7,10]
 def hz(idx): return 220*2**((pent[idx%5]+12*(idx//5))/12)
@@ -57,12 +57,12 @@ def noise_sweep(t0,t1,f0,f1,amp):
     s=w*(.5+.5*np.sin(ph))*np.sin(np.pi*x)**2*amp
     # crude low-pass
     k=np.ones(24)/24; s=np.convolve(s,k,'same'); L[i0:i1]+=s; Rr[i0:i1]+=s
-noise_sweep(19.6*S,22.4*S,300,90,.9)
+noise_sweep((18.6-SH)*S,(21.4-SH)*S,300,90,.9)
 for f,a in ((A*8,.16),(A*12,.12),(A*16,.08)):   # apex flare chord at 19.8
-    n=int(SR*3); x=np.arange(n)/SR; s=np.sin(2*np.pi*f*x)*np.exp(-x/1.2)*np.minimum(1,x/.05)*a; add(s,19.8*S,pan=0)
-n=int(SR*3); x=np.arange(n)/SR; add(np.sin(2*np.pi*45*x)*np.exp(-x/1.4)*.4,22.1*S)  # landing boom at YOU
+    n=int(SR*3); x=np.arange(n)/SR; s=np.sin(2*np.pi*f*x)*np.exp(-x/1.2)*np.minimum(1,x/.05)*a; add(s,(18.8-SH)*S,pan=0)
+n=int(SR*3); x=np.arange(n)/SR; add(np.sin(2*np.pi*45*x)*np.exp(-x/1.4)*.4,(21.1-SH)*S)  # landing boom at YOU
 for i in range(22):                                # sparkle chimes after the pulse lands
-    t0=22.3*S+i*.1+rng.uniform(0,.07); f=hz(10+int(rng.integers(0,8)))*2
+    t0=(21.3-SH)*S+i*.1+rng.uniform(0,.07); f=hz(10+int(rng.integers(0,8)))*2
     n=int(SR*1.0); x=np.arange(n)/SR; add(np.sin(2*np.pi*f*x)*np.exp(-x/.25)*.07,t0,pan=rng.uniform(-.8,.8))
 # --- reverb
 def reverb(x,seed,mix=.38):

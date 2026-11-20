@@ -15,7 +15,7 @@
 /* Ancestor-tree animation. 720x1280, 26.667s, deterministic: window.renderAt(t) draws any frame.
    ?rec  -> 1:1 canvas, no auto-play (used by render.js).  Click to restart. */
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
-const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 460, S = 1.7/1.05, DUR = 26.667*S;
+const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 460, S = 1.7/1.05, SH = 1.5, DUR = (25.2-SH)*S;
 const REC = new URLSearchParams(location.search).has('rec');
 let Z=1;
 const FONT = '"Inter","Helvetica Neue",Helvetica,Arial,sans-serif';
@@ -52,7 +52,7 @@ const TH=[...Array(NT)].map(()=>{
   const u=R()*2-1, ub=cl(u+(R()-.5)*1.2,-1,1), r1=R(), r2=R();
   return {u,ub,r1,r2,a:.04+R()*.07,d:R(),pts:null};
 });
-const SPARK=[...Array(80)].map(()=>({x:(R()-.5)*90,s:22.2+R()*1.6,dur:1+R()*1.4,vy:20+R()*70,vx:(R()-.5)*40,r:3+R()*7}));
+const SPARK=[...Array(80)].map(()=>({x:(R()-.5)*90,s:21.2+R()*1.6,dur:1+R()*1.4,vy:20+R()*70,vx:(R()-.5)*40,r:3+R()*7}));
 
 /* ---------- text ---------- */
 function text(str,x,y,size,weight,color,alpha,align='center',ls=0){
@@ -226,15 +226,15 @@ function buildThread(th){
 const BUMP=['255,226,166','255,232,184','255,238,204','255,244,222','255,250,238','255,255,250'];
 function drawWeb(t){
   const topY=YOU-157;
-  const appear=t-16.9;
+  const appear=t-15.6;
   if(appear<=0)return;
   // pulse sweeps down from apex to funnel
-  const pc=sm((t-19.8)/2.5), yc=APEX+(topY+20-APEX)*pc, pa=(t>19.6&&t<22.9)?Math.sin(cl((t-19.6)/3.3)*Math.PI):0;
+  const pc=sm((t-18.8)/2.5), yc=APEX+(topY+20-APEX)*pc, pa=(t>18.6&&t<21.9)?Math.sin(cl((t-18.6)/3.3)*Math.PI):0;
   ctx.globalCompositeOperation='lighter';
   ctx.lineWidth=1.1;
   for(const th of TH){
     if(!th.pts)buildThread(th);
-    const q=sm((appear-th.d*1.5)/2.0);
+    const q=sm((appear-th.d*1.1)/1.6);
     if(q<=0)continue;
     const last=Math.floor(NS*q), shim=.82+.18*Math.sin(t*1.4+th.d*20);
     for(let i=0;i<last;i++){
@@ -257,7 +257,7 @@ function drawWeb(t){
   gr.addColorStop(0,'rgba(200,150,70,.07)');gr.addColorStop(1,'rgba(200,150,70,0)');
   ctx.globalAlpha=wa;ctx.fillStyle=gr;ctx.fillRect(CX-420,100,840,900);
   // apex orb
-  const flare=(t>19.6&&t<21.2)?Math.sin((t-19.6)/1.6*Math.PI):0;
+  const flare=(t>18.6&&t<20.2)?Math.sin((t-18.6)/1.6*Math.PI):0;
   dot(CX,APEX,18+flare*60,sm(appear/1)*(.8+flare*.6));
   dot(CX,APEX,5,sm(appear/1));
   // pulse flare line when it touches the top
@@ -268,7 +268,7 @@ function drawWeb(t){
 /* ---------- YOU ---------- */
 function drawYou(t,sq){
   ctx.globalCompositeOperation='lighter';
-  const kick=(t>22.1&&t<23.6)?Math.sin((t-22.1)/1.5*Math.PI):0;
+  const kick=(t>21.1&&t<22.6)?Math.sin((t-21.1)/1.5*Math.PI):0;
   const pul=.85+.15*Math.sin(t*2.2);
   dot(CX,YOU,38+kick*50,(.65+kick*.35)*pul);
   dot(CX,YOU,13,1);
@@ -287,7 +287,7 @@ function drawYou(t,sq){
 
 /* ---------- frame ---------- */
 function renderAt(t){
-  t=(((t%DUR)+DUR)%DUR)/S;
+  t=(((t%DUR)+DUR)%DUR)/S; t+=SH*sm((t-13.9)/1.0);  // skip dead time after the full tree
   ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
   const g=gAt(t), sq=sm((t-15.4)/1.7);
@@ -311,7 +311,7 @@ function renderAt(t){
   }
   const qA=1-sm((t-4.6)/.6);
   if(qA>0)fitText('HOW MANY PEOPLE DID IT TAKE TO MAKE YOU?',CX,222,606,700,'#fff',qA*(t<.01?1:1));
-  const tA=sm((t-16.8)/.8);
+  const tA=sm((t-16.0)/.8);
   if(tA>0){
     fitText('GO BACK A FEW THOUSAND YEARS,',CX,150,592,700,'#fff',tA);
     fitText('AND WE ARE ALL RELATED.',CX,192,592,700,'#fff',tA);
