@@ -15,7 +15,7 @@
 /* Ancestor-tree animation. 720x1280, 26.667s, deterministic: window.renderAt(t) draws any frame.
    ?rec  -> 1:1 canvas, no auto-play (used by render.js).  Click to restart. */
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
-const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 460, S = 1.7/1.05, SH = 1.5, DUR = (25.2-SH)*S;
+const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 200, YT = 340, S = 1.7/1.05, SH = 1.5, DUR = (25.2-SH)*S;
 const REC = new URLSearchParams(location.search).has('rec');
 let Z=1;
 const FONT = '"Inter","Helvetica Neue",Helvetica,Arial,sans-serif';
@@ -45,6 +45,8 @@ const wk = (k,sq)=>(15+215*(1-Math.exp(-k/6)))*(1-0.3*sq)*1.2;
 /* ---------- static random data ---------- */
 const NH=260;
 const HAIR=[...Array(NH)].map((_,i)=>({u:(i+R())/NH*2-1,sp:R()*2-1,ph:R()*6.28,fr:.014+R()*.02,am:6+R()*12,len:.55+R()*.45,a:.14+R()*.26}));
+const NP=420, LMAX=Math.pow(2,28);
+const PATHS=[...Array(NP)].map((_,i)=>({L:Math.floor((i+.15+.7*R())/NP*LMAX),sp:R()*2-1,ph:R()*6.28,fr:.014+R()*.02,am:6+R()*12,len:.55+R()*.45,a:.14+R()*.26}));
 const NI=230;
 const INNER=[...Array(NI)].map(()=>({u:R()*2-1,ph:R()*6.28,a:.035+R()*.06}));
 const NT=560, NS=40;
@@ -67,7 +69,7 @@ function fitText(str,x,y,width,weight,color,alpha,ls=0){
 
 /* ---------- phase 1: the tree ---------- */
 function drawTree(t,g,sq){
-  const kf=Math.floor(g+1e-6), p=g-kf, Hh=560*(1-Math.exp(-g/5))*(1-0.72*sq), sp=Hh/g;
+  const kf=Math.floor(g+1e-6), p=g-kf, Hh=820*(1-Math.exp(-g/5))*(1-0.72*sq), sp=Hh/g;
   const Y=k=>YOU-sp*k;
   const labelA=1-sm((t-14.8)/1.6), hairA=1-sq;
   const Dn=9;
@@ -81,37 +83,21 @@ function drawTree(t,g,sq){
     for(let k=0;k<=kf;k++)ctx.lineTo(CX-wk(k,sq),Y(k));
     for(let k=kf;k>=0;k--)ctx.lineTo(CX+wk(k,sq),Y(k));
     const gr=ctx.createLinearGradient(0,Y(kf),0,YOU);
-    gr.addColorStop(0,'rgba(205,140,60,.10)');gr.addColorStop(1,'rgba(205,140,60,.02)');
+    gr.addColorStop(0,'rgba(205,140,60,.045)');gr.addColorStop(1,'rgba(205,140,60,.01)');
     ctx.globalAlpha=1;ctx.fillStyle=gr;ctx.fill();
   }
 
-  // axis: rows are columns now. Rules + rotated labels in screen space (years bottom, counts top)
+  // axis: horizontal rules, years left / counts right (screen space, follows zoomed rows)
   {const zc=Z;ctx.save();ctx.setTransform(1,0,0,1,0,0);Z=1;
-  const vt=(str,X,Yo,size,wt,col,al,alg)=>{ctx.save();ctx.translate(X+size*.35,Yo);ctx.rotate(-Math.PI/2);text(str,0,0,size,wt,col,al,alg);ctx.restore()};
   for(let k=0;k<=kf+(p>0?1:0);k++){
-    const a=(k>kf?p:1)*labelA, X=90+(YOU-Y(k))*zc;
-    if(a<=0.004||X<60||X>706)continue;
-    ctx.globalAlpha=.10*a;ctx.fillStyle='#fff';ctx.fillRect(X,340,1,620);
+    const a=(k>kf?p:1)*labelA, y=YT+(YOU-Y(k))*zc;
+    if(a<=0.004||y<240||y>1255)continue;
+    ctx.globalAlpha=.09*a;ctx.fillStyle='#fff';ctx.fillRect(62,y,596,1);
     const fs=cl(sp*zc*.62,13,17), cnt=Math.pow(2,k).toLocaleString('en-US');
-    vt(String(2000-25*k),X,1058,fs,500,'#9a9a9a',a,'left');
-    vt(cnt,X,262,fs,700,k<2?'#f4dcaa':'#f0cf93',a,'right');
+    text(String(2000-25*k),30,y+5,fs,500,'#9a9a9a',a,'left');
+    text(cnt,692,y+5,fs,700,k<2?'#f4dcaa':'#f0cf93',a,'right');
   }
   Z=zc;ctx.restore();}
-
-  // interior strands (dense funnel texture)
-  if(kf>Dn-1){
-    const yB=Y(Dn-1), yT=Y(g);
-    for(const s of INNER){
-      ctx.beginPath();
-      const N=14;
-      for(let i=0;i<=N;i++){
-        const y=yB+(yT-yB)*i/N, k=(YOU-y)/sp;
-        const x=CX+s.u*wk(k,sq)+Math.sin(y*.05+s.ph+t*.7)*3;
-        i?ctx.lineTo(x,y):ctx.moveTo(x,y);
-      }
-      ctx.globalAlpha=s.a*cl((kf-Dn+1)/3);ctx.strokeStyle='rgb(222,176,100)';ctx.lineWidth=1;ctx.stroke();
-    }
-  }
 
   // edges between generations (full detail to depth Dn)
   for(let k=0;k<=Math.min(kf,Dn-1);k++){
@@ -135,6 +121,24 @@ function drawTree(t,g,sq){
     ctx.strokeStyle='rgb(255,228,170)';
     ctx.globalAlpha=a*.13;ctx.lineWidth=lw*4;ctx.stroke();
     ctx.globalAlpha=a;ctx.lineWidth=lw;ctx.stroke();
+  }
+
+  const nodeOf=(P,k)=>Math.floor(P.L/Math.pow(2,28-k));
+  const bez=(x0,y0,x1,y1,dy,u)=>{const v=1-u;return[v*v*v*x0+3*v*v*u*x0+3*v*u*u*x1+u*u*u*x1,v*v*v*y0+3*v*v*u*(y0-dy)+3*v*u*u*(y1+dy)+u*u*u*y1]};
+  // deep lineages: real connected branches from the detailed tree down through every later generation
+  for(let k=Dn;k<=Math.min(kf,27);k++){
+    const prog=(k===kf)?p:1; if(prog<=0)continue;
+    const y0=Y(k),y1=Y(k+1),dy=(y0-y1)*.55;
+    ctx.beginPath();
+    for(const P of PATHS){
+      const x0=nx(k,nodeOf(P,k)),x1=nx(k+1,nodeOf(P,k+1));
+      const steps=8,last=Math.max(2,Math.ceil(steps*prog));
+      for(let i=0;i<=last;i++){const [x,y]=bez(x0,y0,x1,y1,dy,Math.min(prog,i/steps));i?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+    }
+    const a=cl(.26-(k-Dn)*.008,.10,.26);
+    ctx.strokeStyle='rgb(240,205,140)';
+    ctx.globalAlpha=a*.12;ctx.lineWidth=3;ctx.stroke();
+    ctx.globalAlpha=a;ctx.lineWidth=.9;ctx.stroke();
   }
 
   // dense rows (k>=6): glowing lines that become dotted lines
@@ -172,20 +176,19 @@ function drawTree(t,g,sq){
     }
   }
 
-  // hair (open-ended strands above the top row)
+  // hair: each lineage continues past the top row from its exact tip
   if(hairA>0.01){
-    const M=Math.pow(2,Math.ceil(g-1e-6)), ya=Y(g), w=wk(Math.ceil(g-1e-6),sq);
-    const Lmax=Math.min(ya-110,340);
-    for(const s of HAIR){
-      const n=Math.floor((s.u+1)/2*M), xa=CX+w*(2*(n+.5)/M-1), out=(xa-CX)/(w+1);
-      const L=Lmax*s.len, steps=16;
-      let px=xa,py=ya;
+    const Lmax=Math.min(Y(g)-60,300);
+    for(const P of PATHS){
+      const n0=nodeOf(P,kf); let xt=nx(kf,n0),yt=Y(kf);
+      if(p>0&&kf<28){const n1=nodeOf(P,kf+1);[xt,yt]=bez(xt,yt,nx(kf+1,n1),Y(kf+1),(Y(kf)-Y(kf+1))*.55,p)}
+      const out=(xt-CX)/(wk(Math.min(28,kf+1),sq)+1), L=Lmax*P.len, steps=16;
+      let px=xt,py=yt;
       for(let i=1;i<=steps;i++){
         const d=L*i/steps, f=d/L;
-        const x=xa+s.sp*d*.5+out*d*.35+s.am*Math.sin(d*s.fr+s.ph+t*.6)*f;
-        const y=ya-d;
+        const x=xt+P.sp*d*.5+out*d*.35+P.am*Math.sin(d*P.fr+P.ph+t*.6)*f, y=yt-d;
         ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(x,y);
-        ctx.globalAlpha=s.a*Math.pow(1-f,1.5)*hairA;
+        ctx.globalAlpha=P.a*Math.pow(1-f,1.5)*hairA;
         ctx.strokeStyle='rgb(190,150,84)';ctx.lineWidth=1;ctx.stroke();
         px=x;py=y;
       }
@@ -195,15 +198,15 @@ function drawTree(t,g,sq){
   // YOU orb is drawn by caller
   ctx.globalCompositeOperation='source-over';
 
-  // early name labels (screen space)
+  // early name labels (screen space; scene is rotated 180deg)
   {const zc=Z;ctx.save();ctx.setTransform(1,0,0,1,0,0);Z=1;
   const lab=(i)=>sm((g-(i-.1))/.2)*(1-sm((g-(i+.9))/.2));
-  const SX=y=>90+(YOU-y)*zc, SY=x=>640+(x-CX)*zc;
+  const SX=x=>CX-(x-CX)*zc, SY=y=>YT+(YOU-y)*zc;
   const aMD=lab(1);
-  if(aMD>0){text('MOM',SX(Y(1)),SY(nx(1,0))-26,16,700,'#fff',aMD,'center',3);
-            text('DAD',SX(Y(1)),SY(nx(1,1))+40,16,700,'#fff',aMD,'center',3);}
-  text('GRANDPARENTS',Math.min(SX(Y(2)),540),Math.max(270,640-(wk(2,sq)+34)*zc),16,700,'#fff',lab(2),'center',3);
-  text('GREAT-GRANDPARENTS',Math.min(SX(Y(3)),500),Math.max(270,640-(wk(3,sq)+34)*zc),16,700,'#fff',lab(3),'center',3);
+  if(aMD>0){text('MOM',SX(nx(1,1))-16,SY(Y(1))+5,15,700,'#fff',aMD,'right',3);
+            text('DAD',SX(nx(1,0))+16,SY(Y(1))+5,15,700,'#fff',aMD,'left',3);}
+  text('GRANDPARENTS',CX,SY(Y(2))+34,16,700,'#fff',lab(2),'center',3);
+  text('GREAT-GRANDPARENTS',CX,SY(Y(3))+34,16,700,'#fff',lab(3),'center',3);
   Z=zc;ctx.restore();}
 
   return {kf};
@@ -211,10 +214,10 @@ function drawTree(t,g,sq){
 
 /* ---------- phase 2: the web ---------- */
 function buildThread(th){
-  const topY=YOU-157;
+  const topY=YOU-230;
   const S=[CX+th.u*wk(28,1),topY], A=[CX,APEX];
-  const P1=[CX+th.ub*(350+th.r1*130)*.85,APEX+(130+th.r1*90)*.72];
-  const P2=[CX+th.ub*(370+th.r2*110)*.85,topY-(90+th.r2*120)*.72];
+  const P1=[CX+th.ub*(350+th.r1*130)*.95,APEX+(130+th.r1*90)*1.05];
+  const P2=[CX+th.ub*(370+th.r2*110)*.95,topY-(90+th.r2*120)*1.05];
   th.pts=[];
   for(let i=0;i<=NS;i++){
     const u=i/NS,v=1-u; // from apex (u=0) to start (u=1)
@@ -225,7 +228,7 @@ function buildThread(th){
 }
 const BUMP=['255,226,166','255,232,184','255,238,204','255,244,222','255,250,238','255,255,250'];
 function drawWeb(t){
-  const topY=YOU-157;
+  const topY=YOU-230;
   const appear=t-15.6;
   if(appear<=0)return;
   // pulse sweeps down from apex to funnel
@@ -292,14 +295,14 @@ function renderAt(t){
   ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
   const g=gAt(t), sq=sm((t-15.4)/1.7);
   // camera: start tight on YOU, slowly pull back as the tree grows
-  const Hh=560*(1-Math.exp(-g/5))*(1-0.72*sq);
-  const z=Math.max(1,Math.min(1+1.9*Math.pow(1-sm(t/13.5),1.4),590/Math.max(Hh,1)));
-  Z=z;ctx.save();ctx.translate(90,640);ctx.rotate(Math.PI/2);ctx.scale(z,z);ctx.translate(-CX,-YOU);
+  const Hh=820*(1-Math.exp(-g/5))*(1-0.72*sq);
+  const z=Math.max(1,Math.min(1+1.9*Math.pow(1-sm(t/13.5),1.4),820/Math.max(Hh,1)));
+  Z=z;ctx.save();ctx.translate(CX,YT);ctx.rotate(Math.PI);ctx.scale(z,z);ctx.translate(-CX,-YOU);
   const {kf}=drawTree(t,g,sq);
   drawWeb(t);
   drawYou(t,sq);
   ctx.restore();Z=1;
-  text('YOU',90,640+(Math.min(56*z,100)+40)*(1-sm((t-15.4)/1.7))+235*sm((t-15.4)/1.7),22,700,'#fff',1,'center',5);
+  text('YOU',CX,YT-9*z-26,22,700,'#fff',1,'center',5);
 
   // header
   const hdrA=1-sm((t-14.3)/1.0);
