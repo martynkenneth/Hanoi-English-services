@@ -15,7 +15,7 @@
 /* Ancestor-tree animation. 720x1280, 26.667s, deterministic: window.renderAt(t) draws any frame.
    ?rec  -> 1:1 canvas, no auto-play (used by render.js).  Click to restart. */
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
-const W = 720, H = 1280, CX = 360, YOU = 1020, DUR = 26.667, APEX = 285;
+const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 285, S = 1.7, DUR = 26.667*S;
 const REC = new URLSearchParams(location.search).has('rec');
 let Z=1;
 const FONT = '"Inter","Helvetica Neue",Helvetica,Arial,sans-serif';
@@ -85,16 +85,18 @@ function drawTree(t,g,sq){
     ctx.globalAlpha=1;ctx.fillStyle=gr;ctx.fill();
   }
 
-  // axis rules + labels
+  // axis rules + labels: pinned to screen edges, vertically following the zoomed rows
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);const zc=Z;Z=1;
   for(let k=0;k<=kf+(p>0?1:0);k++){
-    const a=(k>kf?p:1)*labelA, y=Y(k);
-    if(a<=0.004)continue;
-    ctx.globalAlpha=.07*a;ctx.fillStyle='#fff';ctx.fillRect(62,y,596,1);
+    const a=(k>kf?p:1)*labelA, y=YOU+(Y(k)-YOU)*zc;
+    if(a<=0.004||y<235||y>YOU+60)continue;
+    ctx.globalAlpha=.09*a;ctx.fillStyle='#fff';ctx.fillRect(62,y,596,1);
     const yr=2000-25*k, cnt=Math.pow(2,k).toLocaleString('en-US');
-    const fs=cl(sp*.62,11,15);
-    text(String(yr),30,y+4,fs,500,'#8e8e8e',a,'left');
-    text(cnt,692,y+4,fs,700,k<2?'#f4dcaa':'#f0cf93',a,'right');
+    const fs=cl(sp*zc*.62,13,17);
+    text(String(yr),30,y+5,fs,500,'#9a9a9a',a,'left');
+    text(cnt,692,y+5,fs,700,k<2?'#f4dcaa':'#f0cf93',a,'right');
   }
+  Z=zc;ctx.restore();
 
   // interior strands (dense funnel texture)
   if(kf>Dn-1){
@@ -286,7 +288,7 @@ function drawYou(t,sq){
 
 /* ---------- frame ---------- */
 function renderAt(t){
-  t=((t%DUR)+DUR)%DUR;
+  t=(((t%DUR)+DUR)%DUR)/S;
   ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
   const g=gAt(t), sq=sm((t-15.4)/1.7);
