@@ -15,7 +15,7 @@
 /* Ancestor-tree animation. 720x1280, 26.667s, deterministic: window.renderAt(t) draws any frame.
    ?rec  -> 1:1 canvas, no auto-play (used by render.js).  Click to restart. */
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
-const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 285, S = 1.7, DUR = 26.667*S;
+const W = 720, H = 1280, CX = 360, YOU = 1020, APEX = 460, S = 1.7/1.05, DUR = 26.667*S;
 const REC = new URLSearchParams(location.search).has('rec');
 let Z=1;
 const FONT = '"Inter","Helvetica Neue",Helvetica,Arial,sans-serif';
@@ -40,7 +40,7 @@ function gAt(t){
     if(t<t1)return g0+(g1-g0)*sm((t-t0)/(t1-t0));}
   return 28;
 }
-const wk = (k,sq)=>(15+215*(1-Math.exp(-k/6)))*(1-0.3*sq);
+const wk = (k,sq)=>(15+215*(1-Math.exp(-k/6)))*(1-0.3*sq)*1.2;
 
 /* ---------- static random data ---------- */
 const NH=260;
@@ -67,7 +67,7 @@ function fitText(str,x,y,width,weight,color,alpha,ls=0){
 
 /* ---------- phase 1: the tree ---------- */
 function drawTree(t,g,sq){
-  const kf=Math.floor(g+1e-6), p=g-kf, Hh=640*(1-Math.exp(-g/5))*(1-0.72*sq), sp=Hh/g;
+  const kf=Math.floor(g+1e-6), p=g-kf, Hh=560*(1-Math.exp(-g/5))*(1-0.72*sq), sp=Hh/g;
   const Y=k=>YOU-sp*k;
   const labelA=1-sm((t-14.8)/1.6), hairA=1-sq;
   const Dn=9;
@@ -85,18 +85,18 @@ function drawTree(t,g,sq){
     ctx.globalAlpha=1;ctx.fillStyle=gr;ctx.fill();
   }
 
-  // axis rules + labels: pinned to screen edges, vertically following the zoomed rows
-  ctx.save();ctx.setTransform(1,0,0,1,0,0);const zc=Z;Z=1;
+  // axis: rows are columns now. Rules + rotated labels in screen space (years bottom, counts top)
+  {const zc=Z;ctx.save();ctx.setTransform(1,0,0,1,0,0);Z=1;
+  const vt=(str,X,Yo,size,wt,col,al,alg)=>{ctx.save();ctx.translate(X+size*.35,Yo);ctx.rotate(-Math.PI/2);text(str,0,0,size,wt,col,al,alg);ctx.restore()};
   for(let k=0;k<=kf+(p>0?1:0);k++){
-    const a=(k>kf?p:1)*labelA, y=YOU+(Y(k)-YOU)*zc;
-    if(a<=0.004||y<235||y>YOU+60)continue;
-    ctx.globalAlpha=.09*a;ctx.fillStyle='#fff';ctx.fillRect(62,y,596,1);
-    const yr=2000-25*k, cnt=Math.pow(2,k).toLocaleString('en-US');
-    const fs=cl(sp*zc*.62,13,17);
-    text(String(yr),30,y+5,fs,500,'#9a9a9a',a,'left');
-    text(cnt,692,y+5,fs,700,k<2?'#f4dcaa':'#f0cf93',a,'right');
+    const a=(k>kf?p:1)*labelA, X=90+(YOU-Y(k))*zc;
+    if(a<=0.004||X<60||X>706)continue;
+    ctx.globalAlpha=.10*a;ctx.fillStyle='#fff';ctx.fillRect(X,340,1,620);
+    const fs=cl(sp*zc*.62,13,17), cnt=Math.pow(2,k).toLocaleString('en-US');
+    vt(String(2000-25*k),X,1058,fs,500,'#9a9a9a',a,'left');
+    vt(cnt,X,262,fs,700,k<2?'#f4dcaa':'#f0cf93',a,'right');
   }
-  Z=zc;ctx.restore();
+  Z=zc;ctx.restore();}
 
   // interior strands (dense funnel texture)
   if(kf>Dn-1){
@@ -195,26 +195,26 @@ function drawTree(t,g,sq){
   // YOU orb is drawn by caller
   ctx.globalCompositeOperation='source-over';
 
-  // early name labels
+  // early name labels (screen space)
+  {const zc=Z;ctx.save();ctx.setTransform(1,0,0,1,0,0);Z=1;
   const lab=(i)=>sm((g-(i-.1))/.2)*(1-sm((g-(i+.9))/.2));
+  const SX=y=>90+(YOU-y)*zc, SY=x=>640+(x-CX)*zc;
   const aMD=lab(1);
-  if(aMD>0){
-    const x0=nx(1,0),x1=nx(1,1),y=Y(1);
-    text('MOM',x0-16,y+5,15,700,'#fff',aMD,'right',3);
-    text('DAD',x1+16,y+5,15,700,'#fff',aMD,'left',3);
-  }
-  text('GRANDPARENTS',CX,Y(2)-24,16,700,'#fff',lab(2),'center',3);
-  text('GREAT-GRANDPARENTS',CX,Y(3)-24,16,700,'#fff',lab(3),'center',3);
+  if(aMD>0){text('MOM',SX(Y(1)),SY(nx(1,0))-26,16,700,'#fff',aMD,'center',3);
+            text('DAD',SX(Y(1)),SY(nx(1,1))+40,16,700,'#fff',aMD,'center',3);}
+  text('GRANDPARENTS',Math.min(SX(Y(2)),540),Math.max(270,640-(wk(2,sq)+34)*zc),16,700,'#fff',lab(2),'center',3);
+  text('GREAT-GRANDPARENTS',Math.min(SX(Y(3)),500),Math.max(270,640-(wk(3,sq)+34)*zc),16,700,'#fff',lab(3),'center',3);
+  Z=zc;ctx.restore();}
 
   return {kf};
 }
 
 /* ---------- phase 2: the web ---------- */
 function buildThread(th){
-  const topY=YOU-179;
-  const S=[CX+th.u*160,topY], A=[CX,APEX];
-  const P1=[CX+th.ub*(350+th.r1*130),APEX+130+th.r1*90];
-  const P2=[CX+th.ub*(370+th.r2*110),topY-90-th.r2*120];
+  const topY=YOU-157;
+  const S=[CX+th.u*wk(28,1),topY], A=[CX,APEX];
+  const P1=[CX+th.ub*(350+th.r1*130)*.85,APEX+(130+th.r1*90)*.72];
+  const P2=[CX+th.ub*(370+th.r2*110)*.85,topY-(90+th.r2*120)*.72];
   th.pts=[];
   for(let i=0;i<=NS;i++){
     const u=i/NS,v=1-u; // from apex (u=0) to start (u=1)
@@ -225,7 +225,7 @@ function buildThread(th){
 }
 const BUMP=['255,226,166','255,232,184','255,238,204','255,244,222','255,250,238','255,255,250'];
 function drawWeb(t){
-  const topY=YOU-179;
+  const topY=YOU-157;
   const appear=t-16.9;
   if(appear<=0)return;
   // pulse sweeps down from apex to funnel
@@ -253,9 +253,9 @@ function drawWeb(t){
   }
   // soft warmth inside the lens
   const wa=sm(appear/3)*.5;
-  const gr=ctx.createRadialGradient(CX,560,10,CX,560,320);
+  const gr=ctx.createRadialGradient(CX,YOU-400,10,CX,YOU-400,320);
   gr.addColorStop(0,'rgba(200,150,70,.07)');gr.addColorStop(1,'rgba(200,150,70,0)');
-  ctx.globalAlpha=wa;ctx.fillStyle=gr;ctx.fillRect(0,200,W,800);
+  ctx.globalAlpha=wa;ctx.fillStyle=gr;ctx.fillRect(CX-420,100,840,900);
   // apex orb
   const flare=(t>19.6&&t<21.2)?Math.sin((t-19.6)/1.6*Math.PI):0;
   dot(CX,APEX,18+flare*60,sm(appear/1)*(.8+flare*.6));
@@ -276,7 +276,6 @@ function drawYou(t,sq){
   ctx.globalCompositeOperation='source-over';
   ctx.globalAlpha=.28;ctx.strokeStyle='#d9b878';ctx.lineWidth=1;
   ctx.beginPath();ctx.ellipse(CX,YOU+9,56,9,0,0,Math.PI*2);ctx.stroke();
-  text('YOU',CX,YOU+46,22,700,'#fff',1,'center',5);
   // sparkles
   ctx.globalCompositeOperation='lighter';
   for(const s of SPARK){
@@ -293,13 +292,14 @@ function renderAt(t){
   ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
   const g=gAt(t), sq=sm((t-15.4)/1.7);
   // camera: start tight on YOU, slowly pull back as the tree grows
-  const Hh=640*(1-Math.exp(-g/5))*(1-0.72*sq);
-  const z=Math.max(1,Math.min(1+1.9*Math.pow(1-sm(t/13.5),1.4),700/Math.max(Hh,1)));
-  Z=z;ctx.save();ctx.translate(CX,YOU);ctx.scale(z,z);ctx.translate(-CX,-YOU);
+  const Hh=560*(1-Math.exp(-g/5))*(1-0.72*sq);
+  const z=Math.max(1,Math.min(1+1.9*Math.pow(1-sm(t/13.5),1.4),590/Math.max(Hh,1)));
+  Z=z;ctx.save();ctx.translate(90,640);ctx.rotate(Math.PI/2);ctx.scale(z,z);ctx.translate(-CX,-YOU);
   const {kf}=drawTree(t,g,sq);
   drawWeb(t);
   drawYou(t,sq);
   ctx.restore();Z=1;
+  text('YOU',90,640+(Math.min(56*z,100)+40)*(1-sm((t-15.4)/1.7))+235*sm((t-15.4)/1.7),22,700,'#fff',1,'center',5);
 
   // header
   const hdrA=1-sm((t-14.3)/1.0);

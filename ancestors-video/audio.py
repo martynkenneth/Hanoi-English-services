@@ -1,6 +1,6 @@
 # Synthesises the soundtrack: dark ambient pad + one bell per generation + web-phase swell. numpy only.
 import numpy as np, wave, sys
-SR=44100; S=1.7; DUR=26.667*S; N=int(SR*DUR); rng=np.random.default_rng(5)
+SR=44100; S=1.7/1.05; DUR=26.667*S; N=int(SR*DUR); rng=np.random.default_rng(5)
 t=np.arange(N)/SR
 L=np.zeros(N); Rr=np.zeros(N)
 sm=lambda x:(lambda c:c*c*(3-2*c))(np.clip(x,0,1))
