@@ -17,6 +17,7 @@
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const W = 720, H = 1280, CX = 360, YOU = 1020, DUR = 26.667, APEX = 285;
 const REC = new URLSearchParams(location.search).has('rec');
+let Z=1;
 const FONT = '"Inter","Helvetica Neue",Helvetica,Arial,sans-serif';
 
 /* ---------- helpers ---------- */
@@ -57,7 +58,7 @@ const SPARK=[...Array(80)].map(()=>({x:(R()-.5)*90,s:22.2+R()*1.6,dur:1+R()*1.4,
 function text(str,x,y,size,weight,color,alpha,align='center',ls=0){
   if(alpha<=0.003)return;
   ctx.globalAlpha=alpha;ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline='alphabetic';
-  ctx.font=`${weight} ${size}px ${FONT}`;ctx.letterSpacing=ls+'px';ctx.fillText(str,x,y);ctx.letterSpacing='0px';
+  ctx.font=`${weight} ${size/Z}px ${FONT}`;ctx.letterSpacing=(ls/Z)+'px';ctx.fillText(str,x,y);ctx.letterSpacing='0px';
 }
 function fitText(str,x,y,width,weight,color,alpha,ls=0){
   ctx.font=`${weight} 20px ${FONT}`;ctx.letterSpacing=ls+'px';const w=ctx.measureText(str).width;ctx.letterSpacing='0px';
@@ -289,9 +290,14 @@ function renderAt(t){
   ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
   const g=gAt(t), sq=sm((t-15.4)/1.7);
+  // camera: start tight on YOU, slowly pull back as the tree grows
+  const Hh=640*(1-Math.exp(-g/5))*(1-0.72*sq);
+  const z=Math.max(1,Math.min(1+1.9*Math.pow(1-sm(t/13.5),1.4),700/Math.max(Hh,1)));
+  Z=z;ctx.save();ctx.translate(CX,YOU);ctx.scale(z,z);ctx.translate(-CX,-YOU);
   const {kf}=drawTree(t,g,sq);
   drawWeb(t);
   drawYou(t,sq);
+  ctx.restore();Z=1;
 
   // header
   const hdrA=1-sm((t-14.3)/1.0);
